@@ -12,4 +12,4 @@ TEST_DATA_DIR = os.getenv('BRAINVIEW_TEST_DATA_DIR', TEST_DATA_DIR)
 
 def test_loading_data():
     vert_coords, faces, morphology_data, meta_data = fsd.parse_subject('subject1', subjects_dir=TEST_DATA_DIR)
-    assert len(meta_data) == 24
+    assert len(meta_data) == 20
