@@ -16,12 +16,3 @@ brainview.singleview module
     :members:
     :undoc-members:
     :show-inheritance:
-
-brainview.multiview module
---------------------------
-
-.. automodule:: brainview.multiview
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
