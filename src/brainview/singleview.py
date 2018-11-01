@@ -1,59 +1,80 @@
 """
-Functions to display morphology data in 3D on brain surface meshes.
+Functions to display morphometry data in 3D on brain surface meshes.
 
 These functions provide a single view.
 """
 
 import mayavi.mlab as mlab
 import numpy as np
-import brainload.spatial_transform as st
+import brainload as bl
+import brainload.spatial as st
 
-def print_mlab_view(view):
+
+def _print_mlab_view():
     '''See http://docs.enthought.com/mayavi/mayavi/auto/mlab_camera.html#view for details.'''
+    view = mlab.view()
     print "[View] azimuth=%f, elevation=%f, distance=%f" % (view[0], view[1], view[2])
 
-def plot_brain_data_on_mesh(vert_coords, faces, morphology_data, meta_data, do_display_interactively=True, export_image_file=None, draw_mesh_only=False, use_multi_view=True):
-    '''Plots the morphology data onto the brain mesh defined by vert_coords and faces.
-    '''
-    x = vert_coords[:,0]
-    y = vert_coords[:,1]
-    z = vert_coords[:,2]
 
-    mlab.figure(1, bgcolor=(0, 0, 0), size=(800, 600))
-    mayavi_mesh = mlab.triangular_mesh(x, y, z, faces, scalars=morphology_data)
-    print_mlab_view(mlab.view())
-    if use_multi_view:
-        print "---Using multi-view---"
-        x1, y1, z1 = st.rotate_3D_coordinates_around_axes(x, y, z, deg2rad(90), 0, 0);
-        mayavi_mesh_m1 = mlab.triangular_mesh(x1, y1, z1, faces, scalars=morphology_data, color=(1, 0, 0))
-        print_mlab_view(mlab.view())
+def _get_mayavi_mesh(vert_coords, faces, **kwargs):
+    """
+    Creates a mayavi mesh from the vert_coords and faces. All extra arguments are passed to the mlab.triangular_mesh call.
 
-        x2, y2, z2 = st.rotate_3D_coordinates_around_axes(x, y, z, deg2rad(90), 0, 0);
-        x2, y2, z2 = st.scale_3D_coordinates(x2, y2, z2, 1.5)
-        # = rotate_3D_coordinates_around_axes(x, y, z, rotx, roty, rotz)
-        # = scale_3D_coordinates(x, y, z, x_scale_factor, y_scale_factor=None, z_scale_factor=None)
-        # = mirror_3D_coordinates_at_axis(x, y, z, axis, mirror_at_axis_coordinate=None)
-        # = point_mirror_3D_coordinates(x, y, z, point_x, point_y, point_z):
-        x2, y2, z2 = st.translate_3D_coordinates_along_axes(x, y, z, 200, 0, 0)
-        mayavi_mesh_m2 = mlab.triangular_mesh(x2, y2, z2, faces, scalars=morphology_data, color=(0, 0, 1))
-        print_mlab_view(mlab.view())
+    Example: my_mesh = _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, color=(1, 0, 0))
+    """
+    x, y, z = st.coords_a2s(vert_coords)
+    mayavi_mesh = mlab.triangular_mesh(x, y, z, faces, **kwargs)
+    return mayavi_mesh
 
-    # we could transform/rotate the x, y, z coords above and create a second mesh to be able to see the brain from different angles.
-    # See https://www.lfd.uci.edu/~gohlke/code/transformations.py.html for a python implementation of rotations etc.
-    #print mayavi_mesh.position
-    fig_handle = mlab.gcf()
-    if not draw_mesh_only:
-        #mlab.axes().label_text_property.font_size = 12
-        mlab.colorbar()
-        mlab.title('Brain of subject ' + meta_data.get('subject_id', '?'), size=0.4)
-        #mlab.text(0.1, 0.5, meta_data.get('surf', ''), color=(1.0, 0.0, 0.0), width=0.05) # width should be scaled by the number of characters
-        #mlab.text(0.1, 0.55, meta_data.get('measure', ''), color=(1.0, 0.0, 0.0), width=0.05)
-        #mlab.text(0.1, 0.6, meta_data.get('space', ''), color=(1.0, 0.0, 0.0), width=0.05)
 
-    #mlab.view(49, 31.5, 52.8, (4.2, 37.3, 20.6))
-    if not export_image_file is None:
-        print "Exporting scene to file '%s'." % export_image_file
-        #mlab.savefig(export_image_file, figure=fig_handle)   # save scene: this could also be saved in a 3D file format.
+def get_brain_view(vert_coords, faces, morphometry_data):
+    """
+    Convenience wrapper around _get_mayavi_mesh. Creates a mayavi mesh from the vert_coords, faces and morphometry_data.
+    """
+    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data)
 
-    if do_display_interactively:
-        mlab.show()
+
+def activate_overlay(meta_data):
+    """
+    Displays various information from the given meta_data dictionary in the view of the currently active mlab figure.
+    """
+    mlab.colorbar()
+    mlab.title('Brain of subject ' + meta_data.get('subject_id', '?'), size=0.4)
+    mlab.text(0.1, 0.5, meta_data.get('surf', ''), color=(1.0, 0.0, 0.0), width=0.05) # width should be scaled by the number of characters
+    mlab.text(0.1, 0.55, meta_data.get('measure', ''), color=(1.0, 0.0, 0.0), width=0.05)
+
+
+def export_figure(fig_handle, export_file_name_with_extension, silent=False):
+    """
+    Exports the figure identified by the given fig_handle to the file. File must be valid path to a writable location, and the file extension must be one that is supported by mlab.savefig.
+    """
+    if not silent:
+        print "Exporting scene to file '%s'." % export_file_name_with_extension
+        mlab.savefig(export_image_file, figure=fig_handle)
+
+def show():
+    """
+    Renders and displays the currently active mayavi scene in an interactive window.
+    This requires a GUI and a working setup of matplotlib with proper backend configuration on the machine.
+    """
+    mlab.show()
+
+
+def get_brain_multi_view(vert_coords, faces, morphometry_data):
+    mesh_center = get_brain_view(vert_coords, faces, morphometry_data)
+    x, y, z = st.coords_a2s(vert_coords)
+
+    # Create lateral view
+    x1, y1, z1 = st.rotate_3D_coordinates_around_axes(x, y, z, deg2rad(90), 0, 0);
+    mayavi_mesh_m1 = mlab.triangular_mesh(x1, y1, z1, faces, scalars=morphometry_data, color=(1, 0, 0))
+    _print_mlab_view()
+
+    x2, y2, z2 = st.rotate_3D_coordinates_around_axes(x, y, z, deg2rad(90), 0, 0);
+    x2, y2, z2 = st.scale_3D_coordinates(x2, y2, z2, 1.5)
+    # = rotate_3D_coordinates_around_axes(x, y, z, rotx, roty, rotz)
+    # = scale_3D_coordinates(x, y, z, x_scale_factor, y_scale_factor=None, z_scale_factor=None)
+    # = mirror_3D_coordinates_at_axis(x, y, z, axis, mirror_at_axis_coordinate=None)
+    # = point_mirror_3D_coordinates(x, y, z, point_x, point_y, point_z):
+    x2, y2, z2 = st.translate_3D_coordinates_along_axes(x, y, z, 200, 0, 0)
+    mayavi_mesh_m2 = mlab.triangular_mesh(x2, y2, z2, faces, scalars=morphometry_data, color=(0, 0, 1))
+    _print_mlab_view()
