@@ -14,3 +14,6 @@ pytest-runner
 ## The following packages are needed for building the documentation
 #sphinx
 #sphinx-rtd-theme
+
+# The following are required to get mayavi working
+pyside2
