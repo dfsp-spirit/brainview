@@ -20,18 +20,28 @@ def _get_mayavi_mesh(vert_coords, faces, **kwargs):
     """
     Creates a mayavi mesh from the vert_coords and faces. All extra arguments are passed to the mlab.triangular_mesh call.
 
-    Example: my_mesh = _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, color=(1, 0, 0))
+    Returns
+    -------
+    surface: mayavi.modules.surface.Surface
+
+    Examples
+    --------
+    my_mesh = _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, color=(1, 0, 0))
     """
     x, y, z = st.coords_a2s(vert_coords)
     mayavi_mesh = mlab.triangular_mesh(x, y, z, faces, **kwargs)
     return mayavi_mesh
 
 
-def get_brain_view(vert_coords, faces, morphometry_data):
+def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
     """
     Convenience wrapper around _get_mayavi_mesh. Creates a mayavi mesh from the vert_coords, faces and morphometry_data.
+
+    Returns
+    -------
+    surface: mayavi.modules.surface.Surface
     """
-    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data)
+    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
 
 
 def activate_overlay(meta_data):
@@ -44,13 +54,14 @@ def activate_overlay(meta_data):
     mlab.text(0.1, 0.55, meta_data.get('measure', ''), color=(1.0, 0.0, 0.0), width=0.05)
 
 
-def export_figure(fig_handle, export_file_name_with_extension, silent=False):
+def export_figure(fig_handle, export_file_name_with_extension, silent=False, **kwargs):
     """
     Exports the figure identified by the given fig_handle to the file. File must be valid path to a writable location, and the file extension must be one that is supported by mlab.savefig.
     """
     if not silent:
         print "Exporting scene to file '%s'." % export_file_name_with_extension
-        mlab.savefig(export_image_file, figure=fig_handle)
+        mlab.savefig(export_image_file, figure=fig_handle, **kwargs)
+
 
 def show():
     """
