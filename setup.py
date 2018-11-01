@@ -10,8 +10,8 @@ setup(
     name='brainview',
     version='0.0.1',
     description='Visualize morphometry neuroimaging data on 3D brain meshes.',
-    long_description='Provides a high-level interface for visualizing FreeSurfer brain imaging data in 3D by wrapping around matplotlib and mayavi.',
-    keywords='neuroimaging freesurfer visualize plot 3D brain',
+    long_description='Provides a high-level interface for visualizing arbitrary data on brain meshes in 3D by wrapping around matplotlib and mayavi.',
+    keywords='neuroimaging freesurfer visualize plot 3D brain morphometry',
     author='Tim Schäfer',
     url='https://github.com/dfsp-spirit/brainview',
     packages=find_packages(where='src'),
@@ -23,7 +23,7 @@ setup(
     license='MIT',
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov'],
-    install_requires=['numpy', 'nibabel', 'matplotlib', 'mayavi', 'brainload'],
+    install_requires=['numpy', 'nibabel', 'matplotlib', 'mayavi', 'vtk', 'brainload'],
     package_dir = {'': 'src'},                               # The root directory that contains the source for the modules (relative to setup.py) is ./src/
     zip_safe=False
 )
