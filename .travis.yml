@@ -2,6 +2,11 @@ language: python
 python:
   - "2.7"
 
+addons:
+  apt:
+    packages:
+      - vtk
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
