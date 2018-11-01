@@ -16,4 +16,5 @@ pytest-runner
 #sphinx-rtd-theme
 
 # The following are required to get mayavi working
+PyQt5
 #pyside2
