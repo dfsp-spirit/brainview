@@ -15,6 +15,6 @@ pytest-runner
 #sphinx
 #sphinx-rtd-theme
 
-# The following are required to get mayavi working
-PyQt5
+# The following are required to get mayavi working locally, but requesting them in travis breaks the build
+#PyQt5
 #pyside2
