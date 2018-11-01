@@ -5,7 +5,7 @@ python:
 addons:
   apt:
     packages:
-      - vtk
+      - tcl-vtk
 
 # command to install dependencies
 install:
