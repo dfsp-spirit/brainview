@@ -13,9 +13,8 @@ def run_example_client():
     subjects_dir = os.path.join(os.getenv('HOME'), 'data', 'tim_only')
     vert_coords, faces, morphometry_data, meta_data = bl.subject('tim', subjects_dir=subjects_dir)
 
-    fig = mlab.figure(1, bgcolor=(0, 0, 0), size=(800, 600))
+    fig = mlab.figure(1, bgcolor=(1, 1, 1), size=(800, 600))
     brain_mesh = bv.singleview.get_brain_view(vert_coords, faces, morphometry_data)
-    print brain_mesh
     bv.singleview.show()
 
 
