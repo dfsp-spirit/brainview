@@ -36,10 +36,22 @@ def brainviewer():
     surface = args.surface
     hemi = args.hemi
 
+    if verbose:
+        print("Loading data for subject %s from subjects dir %s: measure %s of surface %s for hemisphere %s." % (subject_id, subjects_dir, measure, surface, hemi))
+
     vert_coords, faces, morphometry_data, meta_data = bl.subject(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi)
 
+    if verbose:
+        if hemi == "lh" or hemi == "both":
+            print("Loaded lh surface mesh from file '%s'." % meta_data["lh.surf_file"])
+            print("Loaded lh morphometry data from file '%s'." % meta_data["lh.morphometry_file"])
+        if hemi == "rh" or hemi == "both":
+            print("Loaded rh surface from file '%s'." % meta_data["rh.surf_file"])
+            print("Loaded rh morphometry data from file '%s'." % meta_data["rh.morphometry_file"])
+        print "Loaded mesh consisting of %d vertices and %d faces. Loaded morphometry data for %d vertices." % (vert_coords.shape[0], faces.shape[0], morphometry_data.shape[0])
+
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
-    fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 600))
+    fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(800, 600))
     brain_mesh = bv.get_brain_view(vert_coords, faces, morphometry_data)
     bv.show()
 
