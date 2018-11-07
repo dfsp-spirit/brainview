@@ -17,7 +17,7 @@ def brainviewer():
     parser.add_argument("-d", "--subjects_dir", help="The subjects_dir containing the subject. Defaults to environment variable SUBJECTS_DIR.", default="")
     parser.add_argument("-m", "--measure", help="The measure to load. String, defaults to 'area'. ", default="area")
     parser.add_argument("-s", "--surface", help="The surface to load. String, defaults to 'white'.", default="white")
-    parser.add_argument("-e", "--hemi", help="The hemisphere to load. One of ('both', 'lh, 'rh'). Defaults to 'both'.", default="both")
+    parser.add_argument("-e", "--hemi", help="The hemisphere to load. One of ('both', 'lh, 'rh'). Defaults to 'both'.", default="both", choices=['lh', 'rh', 'both'])
     parser.add_argument("-v", "--verbose", help="Increase output verbosity.", action="store_true")
     args = parser.parse_args()
 
