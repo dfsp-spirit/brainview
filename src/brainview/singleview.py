@@ -8,7 +8,7 @@ import mayavi.mlab as mlab
 import numpy as np
 import brainload as bl
 import brainload.spatial as st
-
+mlab.options.offscreen = True
 
 def _print_mlab_view():
     '''See http://docs.enthought.com/mayavi/mayavi/auto/mlab_camera.html#view for details.'''
@@ -41,8 +41,8 @@ def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
     -------
     surface: mayavi.modules.surface.Surface
     """
-    print "min=%d max=%d" % (np.min(morphometry_data), np.max(morphometry_data))
-    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
+    print "min=%f max=%f" % (np.min(morphometry_data), np.max(morphometry_data))
+    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, vmin=-0.1, vmax=0.1, **kwargs)
 
 
 def activate_overlay(meta_data):
@@ -61,7 +61,7 @@ def export_figure(fig_handle, export_file_name_with_extension, silent=False, **k
     """
     if not silent:
         print "Exporting scene to file '%s'." % export_file_name_with_extension
-        mlab.savefig(export_image_file, figure=fig_handle, **kwargs)
+    mlab.savefig(export_image_file, figure=fig_handle, **kwargs)
 
 
 def show():
