@@ -5,6 +5,8 @@ import mayavi.mlab as mlab
 import brainload as bl
 import brainview as bv
 
+mlab.options.offscreen = True
+
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))

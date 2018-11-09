@@ -8,7 +8,6 @@ import mayavi.mlab as mlab
 import numpy as np
 import brainload as bl
 import brainload.spatial as st
-mlab.options.offscreen = True
 
 def _print_mlab_view():
     '''See http://docs.enthought.com/mayavi/mayavi/auto/mlab_camera.html#view for details.'''
