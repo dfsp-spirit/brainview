@@ -21,6 +21,8 @@ def brainviewer():
     parser.add_argument("-c", "--common-subject-mode", help="Load data mapped to a common or average subject.", action="store_true")
     parser.add_argument("-a", "--average-subject", help="The common or average subject to use. String, defaults to 'fsaverage'. Ignored unless -c is active.", default="fsaverage")
     parser.add_argument("-f", "--fwhm", help="The smoothing or fwhm setting to use for the common subject measure. String, defaults to '10'. Ignored unless -c is active.", default="10")
+    parser.add_argument("-i", "--interactive", help="Display brain plot in an interactive window.", action="store_true")
+    parser.add_argument("-o", "--outputfile", help="Output image file name. String, defaults to 'brain.png'.", default="brain.png")
     parser.add_argument("-v", "--verbose", help="Increase output verbosity.", action="store_true")
     args = parser.parse_args()
 
@@ -38,6 +40,11 @@ def brainviewer():
     measure = args.measure
     surface = args.surface
     hemi = args.hemi
+
+    interactive = False
+    if args.interactive:
+        interactive = True
+    mlab.options.offscreen = not interactive
 
     if args.common_subject_mode:
         fwhm = args.fwhm
@@ -62,7 +69,12 @@ def brainviewer():
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(800, 600))
     brain_mesh = bv.get_brain_view(vert_coords, faces, morphometry_data)
-    bv.show()
+    print "Saving brain view to file '%s'..." % (args.outputfile)
+    mlab.savefig(args.outputfile)
+    if interactive:
+        if verbose:
+            print "Interactive mode set, displaying brain plot in interactive window."
+        bv.show()
 
 
 if __name__ == "__main__":
