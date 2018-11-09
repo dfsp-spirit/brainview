@@ -26,8 +26,9 @@ It's a bit too early for that.
 
 ## Screenshots
 
+Brain curvature plotted on the white surface:
 ![Curvature](./img/brain_curv.png?raw=true "Brain curvature")
-Brain curvature plotted on the white surface of a single subject.
+
 
 
 ## Obtaining suitable pre-processed sMRI input data for brainview
