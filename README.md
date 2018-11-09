@@ -26,7 +26,8 @@ It's a bit too early for that.
 
 ## Screenshots
 
-Definitely -- but not yet.
+![Curvature](./img/brain_curv.png?raw=true "Brain curvature")
+
 
 
 ## Obtaining suitable pre-processed sMRI input data for brainview
