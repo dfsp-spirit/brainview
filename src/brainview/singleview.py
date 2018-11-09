@@ -41,7 +41,7 @@ def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
     surface: mayavi.modules.surface.Surface
     """
     print "min=%f max=%f" % (np.min(morphometry_data), np.max(morphometry_data))
-    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, vmin=-0.1, vmax=0.1, **kwargs)
+    return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
 
 
 def activate_overlay(meta_data):

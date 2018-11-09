@@ -67,7 +67,8 @@ def brainviewer():
         print "Loaded mesh consisting of %d vertices and %d faces. Loaded morphometry data for %d vertices." % (vert_coords.shape[0], faces.shape[0], morphometry_data.shape[0])
 
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
-    fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(800, 600))
+    cfg = bv.get_config()
+    fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(cfg.getint('figure', 'width'), cfg.getint('figure', 'height')))
     brain_mesh = bv.get_brain_view(vert_coords, faces, morphometry_data)
     print "Saving brain view to file '%s'..." % (args.outputfile)
     mlab.savefig(args.outputfile)
