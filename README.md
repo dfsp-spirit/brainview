@@ -26,12 +26,8 @@ It's a bit too early for that.
 
 ## Screenshots
 
-Brain curvature plotted on the white surface:
-![Curvature](./img/brain_curv_white.png?raw=true "Brain curvature white")
-
-Same measure for the pial surface:
-![Curvature](./img/brain_curv_pial.png?raw=true "Brain curvature pial")
-
+Curvature plotted on the white surface (left) and pial (right) surfaces of a human brain:
+![Curvature](./img/curvature.png?raw=true "Brain curvature white and pial")
 
 
 ## Obtaining suitable pre-processed sMRI input data for brainview
