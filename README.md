@@ -4,9 +4,9 @@ Python module to visualize morphometry data on 3D brain meshes. Based on matplot
 
 ## About
 
-`brainview `is designed to visualize morphometry data in 3D on brain surfaces. The goal is to provide an easy-to-use interface to quickly visualize data loaded with [brainload](https://github.com/dfsp-spirit/brainload), [nibabel](http://nipy.org/nibabel/) or any other tool.
+`brainview` is designed to visualize morphometry data in 3D on brain surfaces. The goal is to provide an easy-to-use interface to quickly visualize data loaded with [brainload](https://github.com/dfsp-spirit/brainload), [nibabel](http://nipy.org/nibabel/) or any other tool.
 
-The module will only provide basic visualization functions intended for live inspection of your data. If you are interesting in a full solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead.
+The module will only provide basic visualization functions intended for quick (and usually interactive) live inspection of your data. If you are interesting in a full solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead.
 
 [![Build Status](https://travis-ci.org/dfsp-spirit/brainview.svg?branch=master)](https://travis-ci.org/dfsp-spirit/brainview)
 
@@ -17,9 +17,22 @@ This is pre-alpha and not ready for usage yet. Come back another day.
 
 ## Interface (WIP)
 
+#### API
+
 Not yet.
 
-## API Documentation
+#### Command line
+
+The package comes with an example client: after installing `brainview`, you can use the `brainviewer` command from your shell to visualize data. Run `brainviewer --help` to see all available options.
+
+If you have FreeSurfer installed and want to interactively inspect the curvature for `bert`, a Freesurfer example subject, try:
+
+```console
+brainviewer bert -d "$FREESURFER_HOME" -m curv -i
+```
+
+
+## Documentation
 
 It's a bit too early for that.
 
@@ -47,7 +60,7 @@ Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT
 Alternatives to `brainview`:
 
 - If you want a full brain visualization package for Python that allows you to plot morphometry data in various ways and in publication quality, you should definitely have a look at [PySurfer](https://pysurfer.github.io/).
-- If you have to use Matlab instead of Python for whatever reason, I can recommend [SurfStat](http://www.math.mcgill.ca/keith/surfstat/).
+- If you have to use Matlab instead of Python, I can recommend [SurfStat](http://www.math.mcgill.ca/keith/surfstat/). It can do way more than visualization: it also features terms which allow you do conveniently formulate GLMs and it has support different mothods to detect clusters and correct for multiple comparisons.
 
 ## License
 
