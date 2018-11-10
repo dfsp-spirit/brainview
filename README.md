@@ -26,7 +26,7 @@ It's a bit too early for that.
 
 ## Screenshots
 
-Curvature plotted on the white surface (left) and pial (right) surfaces of a human brain:
+The smoothed mean curvature plotted on the white (left) and pial (right) surfaces of a human brain:
 ![Curvature](./img/curvature.png?raw=true "Brain curvature white and pial")
 
 
