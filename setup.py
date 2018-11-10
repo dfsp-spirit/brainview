@@ -25,5 +25,10 @@ setup(
     tests_require=['pytest', 'pytest-cov'],
     install_requires=['numpy', 'nibabel', 'matplotlib', 'mayavi', 'vtk', 'brainload'],
     package_dir = {'': 'src'},                               # The root directory that contains the source for the modules (relative to setup.py) is ./src/
-    zip_safe=False
+    zip_safe=False,
+    entry_points={
+    'console_scripts': [
+        'brainviewer = brainview.brainviewer:brainviewer',
+    ],
+},
 )
