@@ -2,7 +2,11 @@
 
 List of questions and answers for brainview.
 
-#### I am getting the following warning when running brainview: `(python:6960): dbind-WARNING **: 14:42:13.238: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files`
+#### I am getting a dbind-WARNING avery time I run brainview
+
+The warning looks similar to this line: `(python:6960): dbind-WARNING **: 14:42:13.238: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files`
+
+*Answer*
 
 A dbind component is missing, install it:
 
