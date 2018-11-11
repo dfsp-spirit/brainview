@@ -2,7 +2,7 @@
 
 List of questions and answers for brainview.
 
-#### I am getting a dbind-WARNING avery time I run brainview
+#### I am getting a dbind-WARNING every time I run brainview. How to remove it?
 
 The warning looks similar to this line: `(python:6960): dbind-WARNING **: 14:42:13.238: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files`
 
@@ -14,7 +14,7 @@ A dbind component is missing, install it:
 $ sudo apt-get install at-spi2-core
 ```
 
-#### No window is being opened when I call `mlab.show`
+#### No window is being opened when I call `mlab.show`.
 
 Please make sure that you can run the Matplotlib and Mayavi demo scenes. If your Mayavi setup is not working, brainview cannot work.
 
