@@ -4,10 +4,11 @@ Functions to display morphometry data in 3D on brain surface meshes.
 These functions provide a single view.
 """
 
-import mayavi.mlab as mlab
 import numpy as np
 import brainload as bl
 import brainload.spatial as st
+import warnings
+import mayavi.mlab as mlab
 
 def _print_mlab_view():
     '''See http://docs.enthought.com/mayavi/mayavi/auto/mlab_camera.html#view for details.'''

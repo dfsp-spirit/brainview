@@ -7,7 +7,7 @@ import brainview as bv
 import argparse
 
 # To run this in dev mode (in virtual env, pip -e install of brainview active) from REPO_ROOT:
-# PYTHONPATH=./src/brainview python bin/brainviewer.py tim -d ~/data/tim_only/
+# PYTHONPATH=./src/brainview python src/brainview/brainviewer.py tim -d ~/data/tim_only/
 
 def brainviewer():
 
