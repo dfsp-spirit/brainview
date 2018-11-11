@@ -20,7 +20,7 @@ def _print_mlab_view():
     print "[View] azimuth=%f, elevation=%f, distance=%f" % (view[0], view[1], view[2])
 
 
-def _get_mayavi_mesh(vert_coords, faces, **kwargs):
+def _get_surface_from_mlab_triangular_mesh(vert_coords, faces, **kwargs):
     """
     Creates a mayavi mesh from the vert_coords and faces. All extra arguments are passed to the mlab.triangular_mesh call.
 
@@ -37,18 +37,33 @@ def _get_mayavi_mesh(vert_coords, faces, **kwargs):
     return mayavi_mesh
 
 
-def _get_mayavi_source_mesh(vert_coords, faces, morphometry_data, **kwargs):
+def _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometry_data, **kwargs):
     """
     Load the data as a surface based on a triangular_mesh_source.
 
     Load the mesh as an `mlab.pipeline.triangular_mesh_source`. This is inspired by what is done in the _Hemisphere class of PySurfer. It was needed because when I used `mlab.triangular_mesh`, the colors were broken for some meshes.
     """
+    kwargs_mesh_source = {'scalars': morphometry_data}
+    kwargs_surface = {'colormap': 'cool'}
     x, y, z = st.coords_a2s(vert_coords)
-    src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces)
+    src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces, **kwargs_mesh_source)
     src_mesh.data.points = vert_coords
     src_mesh.data.cell_data.normals = None
-    surf = mlab.pipeline.surface(src_mesh, reset_zoom=True)
+    surf = mlab.pipeline.surface(src_mesh, reset_zoom=True, **kwargs_surface)
     surf.actor.property.backface_culling = True
+
+    # set color LUT manually, see http://docs.enthought.com/mayavi/mayavi/auto/example_custom_colormap.html
+    lut = surf.module_manager.scalar_lut_manager.lut.table.to_array()
+
+    # The lut is a 255x4 array, with the columns representing RGBA
+    # (red, green, blue, alpha) coded with integers going from 0 to 255.
+
+    # We modify the alpha channel to add a transparency gradient
+    lut[:, -1] = np.linspace(0, 255, 256)
+    # and finally we put this LUT back in the surface object. We could have
+    # added any 255*4 array rather than modifying an existing LUT.
+    surf.module_manager.scalar_lut_manager.lut.table = lut
+    mlab.draw()
 
 
 def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
@@ -78,7 +93,7 @@ def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
     """
     print "min=%f max=%f" % (np.min(morphometry_data), np.max(morphometry_data))
     #return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
-    return _get_mayavi_source_mesh(vert_coords, faces, morphometry_data, **kwargs)
+    return _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometry_data, **kwargs)
 
 
 def activate_overlay(meta_data):
