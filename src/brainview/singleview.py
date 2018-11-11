@@ -38,10 +38,14 @@ def _get_mayavi_mesh(vert_coords, faces, **kwargs):
 
 
 def _get_mayavi_source_mesh(vert_coords, faces, morphometry_data, **kwargs):
+    """
+    Load the data as a surface based on a triangular_mesh_source.
+
+    Load the mesh as an `mlab.pipeline.triangular_mesh_source`. This is inspired by what is done in the _Hemisphere class of PySurfer. It was needed because when I used `mlab.triangular_mesh`, the colors were broken for some meshes.
+    """
     x, y, z = st.coords_a2s(vert_coords)
     src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces)
     src_mesh.data.points = vert_coords
-    #src_mesh.data.point_data.normals = geo.nn
     src_mesh.data.cell_data.normals = None
     surf = mlab.pipeline.surface(src_mesh, reset_zoom=True)
     surf.actor.property.backface_culling = True
