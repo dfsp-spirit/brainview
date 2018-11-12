@@ -23,4 +23,4 @@ def test_brainload_works_and_testdata_exists():
 def test_brain_view_single_gets_created():
     vert_coords, faces, morphometry_data, meta_data = bl.subject('subject1', subjects_dir=TEST_DATA_DIR)
     fig = mlab.figure(1, bgcolor=(0, 0, 0), size=(800, 600))
-    brain_mesh = bv.singleview.get_brain_view(vert_coords, faces, morphometry_data)
+    brain_mesh = bv.singleview.get_brain_view(fig, vert_coords, faces, morphometry_data)
