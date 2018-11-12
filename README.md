@@ -1,12 +1,14 @@
 # brainview
-Simple Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and mayavi.
+Simple Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and Mayavi.
 
 
 ## About
 
-`brainview` is designed to visualize arbitrary data in 3D on brain surface meshes (see the screenshots below for an example). The typical usage is to plot brain morphometry data loaded with [brainload](https://github.com/dfsp-spirit/brainload), [nibabel](http://nipy.org/nibabel/) or similar tools during interactive data analysis. But you could plot any data that assigns a scalar value to each vertex, of course. Note that brainload plots data, not colors, i.e., the colors are usually derived from a separate colormap.
+`brainview` is designed to visualize arbitrary data in 3D on brain surface meshes (see the screenshots below for an example). The typical usage is to plot brain morphometry data loaded with [brainload](https://github.com/dfsp-spirit/brainload), [nibabel](http://nipy.org/nibabel/) or similar tools during interactive data analysis.
 
-IMPORTANT: Brainload only provides basic visualization functions intended for quick (and usually interactive) live inspection of your data. If you are interesting in a full-featured brain visualization solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead. Brainview is in no way intended to be a replacement for tools like PySurfer: it serves a different purpose.
+Note that brainload plots data, not colors, i.e., the colors are usually derived from a separate colormap.
+
+IMPORTANT: Brainload only provides basic visualization functions intended for quick (and usually interactive) live inspection of your data. If you are interesting in a full-featured brain visualization solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead. Brainview is in no way intended to be a replacement for tools like PySurfer.
 
 [![Build Status](https://travis-ci.org/dfsp-spirit/brainview.svg?branch=master)](https://travis-ci.org/dfsp-spirit/brainview)
 
@@ -55,11 +57,9 @@ If you do not have your MRI data / FreeSurfer output at hand but still want to t
 Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT file](README_DEVELOPMENT.md) in this repository for instructions on installing the development version and running the tests.
 
 
-## Alternatives and similar tools
+## Related neuroimaging tools
 
-Alternatives to `brainview`:
-
-- If you want a full brain visualization package for Python that allows you to plot morphometry data in various ways and in publication quality, you should definitely have a look at [PySurfer](https://pysurfer.github.io/).
+- If you want a full brain visualization package for Python that allows you to plot morphometry data in various ways and in publication quality, you should definitely have a look at [PySurfer](https://pysurfer.github.io/). PySurfer also offers different views of the brain in a single overview image and supports time data.
 - If you have to use Matlab instead of Python, I can recommend [SurfStat](http://www.math.mcgill.ca/keith/surfstat/). It can do way more than visualization: it also features terms which allow you do conveniently formulate GLMs and it has support for different methods to detect spatial clusters of significant group differences, correct for multiple comparisons and more.
 
 ## License
