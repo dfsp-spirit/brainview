@@ -37,15 +37,74 @@ def _get_surface_from_mlab_triangular_mesh(vert_coords, faces, **kwargs):
     return mayavi_mesh
 
 
-def _create_test_lut(num_values):
+def _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, morphometry_data, **kwargs):
+    """
+    Load the data as a surface based on a triangular_mesh_source.
+
+    Load the mesh as an `mlab.pipeline.triangular_mesh_source`. This is inspired by what is done in the _Hemisphere class of PySurfer. It was needed because when I used `mlab.triangular_mesh`, the colors were broken for some meshes.
+    """
+    _print_data_description(vert_coords, faces, morphometry_data)
+    kwargs_mesh_source = {'scalars': morphometry_data}
+    #kwargs_mesh_source = {'scalars': np.arange(len(morphometry_data))}
+    kwargs_surface = {'colormap': 'cool'}
+    #kwargs_surface = {}
+    x, y, z = st.coords_a2s(vert_coords)
+    src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces, figure=fig, **kwargs_mesh_source)
+    #src_mesh.data.points = vert_coords
+    #mesh_dataset = src_mesh.mlab_source.dataset
+
+    #array_id = mesh_dataset.point_data.add_array(morphometry_data)
+    #mesh_dataset.point_data.get_array(array_id).name = array_id
+    #mesh_dataset.point_data.update()
+
+    # build visualization pipeline
+    #pipe = mlab.pipeline.set_active_attribute(mesh_dataset, point_scalars=array_id, figure=fig)
+    #if pipe.parent not in fig.children:
+    #    fig.add_child(pipe.parent)
+
+    src_mesh.update()
+    surf = mlab.pipeline.surface(src_mesh, figure=fig, reset_zoom=True, **kwargs_surface)
+    surf.actor.property.backface_culling = True
+
+    # set color LUT manually, see http://docs.enthought.com/mayavi/mayavi/auto/example_custom_colormap.html
+    lut_manager = surf.module_manager.scalar_lut_manager
+    lut = lut_manager.lut.table.to_array() # get current lut
+
+    # The lut is a 255x4 array, with the columns representing RGBA
+    # (red, green, blue, alpha) coded with integers going from 0 to 255.
+
+    # We modify the alpha channel to add a transparency gradient
+    #lut[:, -1] = np.linspace(0, 255, 256)
+
+    lut = _create_test_lut()
+    #lut_manager.load_lut_from_list(lut / 255.)
+    # and finally we put this LUT back in the surface object. We could have
+    # added any 255*4 array rather than modifying an existing LUT.
+    lut_manager.lut.table = lut
+    fig.render()
+    mlab.draw()
+
+
+def _create_test_lut():
     """
     Create a color lookup table, uses RGBA with color values from 0 to 255.
     """
-    lut = np.zeros((256, 4), dtype=float)
-    lut[:, 0] = np.linspace(0, 255, 256) # R
-    lut[:, 1] = np.linspace(0, 255, 256) # G
-    lut[:, 2] = np.linspace(0, 255, 256) # B
-    lut[:, 3] = np.linspace(0, 255, 256) # Alpha
+    num_values = 256
+    lut = np.ones((num_values, 4), dtype=int)
+    #lut[:, 0] = np.arange(num_values) # R
+    #lut[:, 1] = np.arange(num_values) # G
+    #lut[:, 2] = np.arange(num_values) # B
+    #lut[:, 3] = np.ones(num_values, np.int) * 255 # Alpha
+
+    #lut[0:50000, 0] = np.ones(50000, np.int) * 50
+    #lut[50000:100000, 0] = np.ones(50000, np.int) * 150
+
+    red = np.array([255, 10, 10, 255]) # defines a color as RGBA
+    green = np.array([10, 255, 10, 255])
+    blue = np.array([10, 10, 255, 255])
+    lut[0:50, :] = red
+    lut[50:150, :] = green
+    lut[150:, :] = blue
     return lut
 
 
@@ -59,13 +118,13 @@ def scalars_from_label():
 
 
 def lut_from_annotation():
-    """
-    Create an mlab lookup table (LUT) from a FreeSurfer annotation file.
+        """
+        Create an mlab lookup table (LUT) from a FreeSurfer annotation file.
 
-    Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1, converts it to a better format, then creates the LUT from that.
-    """
-    annotation_to_vertcolormap()
-    pass
+        Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1, converts it to a better format, then creates the LUT from that.
+        """
+        annotation_to_vertcolormap()
+        pass
 
 def annotation_to_vertcolormap():
     """
@@ -108,8 +167,8 @@ def get_brain_view(fig, vert_coords, faces, morphometry_data, **kwargs):
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
     morphometry_data = morphometry_data.astype(float)
-    return _get_surface_from_mlab_triangular_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
-    #return _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, _prepare_data(morphometry_data), **kwargs)
+    #return _get_surface_from_mlab_triangular_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
+    return _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, morphometry_data, **kwargs)
 
 
 def activate_overlay(meta_data):
