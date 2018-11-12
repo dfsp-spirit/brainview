@@ -37,49 +37,16 @@ def _get_surface_from_mlab_triangular_mesh(vert_coords, faces, **kwargs):
     return mayavi_mesh
 
 
-def _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometry_data, **kwargs):
-    """
-    Load the data as a surface based on a triangular_mesh_source.
-
-    Load the mesh as an `mlab.pipeline.triangular_mesh_source`. This is inspired by what is done in the _Hemisphere class of PySurfer. It was needed because when I used `mlab.triangular_mesh`, the colors were broken for some meshes.
-    """
-    _print_data_description(vert_coords, faces, morphometry_data)
-    kwargs_mesh_source = {'scalars': morphometry_data}
-    #kwargs_mesh_source = {'scalars': np.arange(len(morphometry_data))}
-    #kwargs_surface = {'colormap': 'cool'}
-    kwargs_surface = {}
-    x, y, z = st.coords_a2s(vert_coords)
-    src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces, **kwargs_mesh_source)
-    src_mesh.data.points = vert_coords
-    src_mesh.data.cell_data.normals = None
-    surf = mlab.pipeline.surface(src_mesh, reset_zoom=True, **kwargs_surface)
-    surf.actor.property.backface_culling = True
-
-    # set color LUT manually, see http://docs.enthought.com/mayavi/mayavi/auto/example_custom_colormap.html
-    lut = surf.module_manager.scalar_lut_manager.lut.table.to_array()
-
-    # The lut is a 255x4 array, with the columns representing RGBA
-    # (red, green, blue, alpha) coded with integers going from 0 to 255.
-
-    # We modify the alpha channel to add a transparency gradient
-    lut[:, -1] = np.linspace(0, 255, 256)
-
-    lut = _create_test_lut(len(morphometry_data))
-    # and finally we put this LUT back in the surface object. We could have
-    # added any 255*4 array rather than modifying an existing LUT.
-    surf.module_manager.scalar_lut_manager.lut.table = lut
-    mlab.draw()
-
-
 def _create_test_lut(num_values):
     """
     Create a color lookup table, uses RGBA with color values from 0 to 255.
     """
-    lut = np.zeros((256, 4), dtype=int)
-    #lut[:, 0] = np.linspace(0, 255, 256) # R
-    #lut[:, 1] = np.linspace(0, 255, 256) # G
-    #lut[:, 2] = np.linspace(0, 255, 256) # B
-    #lut[:, 3] = np.linspace(0, 255, 256) # Alpha
+    lut = np.zeros((256, 4), dtype=float)
+    lut[:, 0] = np.linspace(0, 255, 256) # R
+    lut[:, 1] = np.linspace(0, 255, 256) # G
+    lut[:, 2] = np.linspace(0, 255, 256) # B
+    lut[:, 3] = np.linspace(0, 255, 256) # Alpha
+    return lut
 
 
 def scalars_from_label():
@@ -92,13 +59,13 @@ def scalars_from_label():
 
 
 def lut_from_annotation():
-        """
-        Create an mlab lookup table (LUT) from a FreeSurfer annotation file.
+    """
+    Create an mlab lookup table (LUT) from a FreeSurfer annotation file.
 
-        Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1, converts it to a better format, then creates the LUT from that.
-        """
-        annotation_to_vertcolormap()
-        pass
+    Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1, converts it to a better format, then creates the LUT from that.
+    """
+    annotation_to_vertcolormap()
+    pass
 
 def annotation_to_vertcolormap():
     """
@@ -112,7 +79,7 @@ def _print_data_description(vert_coords, faces, morphometry_data, print_tag="[da
     print "%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data))
 
 
-def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
+def get_brain_view(fig, vert_coords, faces, morphometry_data, **kwargs):
     """
     Create a mayavi mesh from data.
 
@@ -120,6 +87,9 @@ def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
 
     Parameters
     ----------
+    fig: figure handle
+        The figure the surface should be added to
+
     vert_coords: 2D numpy array of shape (n_verts, 3)
         An array of vertex corrdinates. Each vertex position is identified by an x, y, and z coordinate.
 
@@ -137,8 +107,9 @@ def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
     surface: mayavi.modules.surface.Surface
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
-    #return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
-    return _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometry_data, **kwargs)
+    morphometry_data = morphometry_data.astype(float)
+    return _get_surface_from_mlab_triangular_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
+    #return _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, _prepare_data(morphometry_data), **kwargs)
 
 
 def activate_overlay(meta_data):

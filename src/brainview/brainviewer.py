@@ -57,6 +57,8 @@ def brainviewer():
             print("Loading data for subject %s from subjects dir %s: measure %s of surface %s for hemisphere %s." % (subject_id, subjects_dir, measure, surface, hemi))
         vert_coords, faces, morphometry_data, meta_data = bl.subject(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi)
 
+    morphometry_data = morphometry_data.astype(float)
+
     if verbose:
         if hemi == "lh" or hemi == "both":
             print("Loaded lh surface mesh from file '%s'." % meta_data["lh.surf_file"])
@@ -69,7 +71,7 @@ def brainviewer():
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
     cfg = bv.get_config()
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(cfg.getint('figure', 'width'), cfg.getint('figure', 'height')))
-    brain_mesh = bv.get_brain_view(vert_coords, faces, morphometry_data)
+    brain_mesh = bv.get_brain_view(fig, vert_coords, faces, morphometry_data)
     print "Saving brain view to file '%s'..." % (args.outputfile)
     mlab.savefig(args.outputfile)
     if interactive:
