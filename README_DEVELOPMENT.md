@@ -15,7 +15,7 @@ sudo apt-get install python-pip build-essential git python-pyqt5 python-pyqt5.qt
 You will also need Python bindings for qt. You should install them in the virtual environment using `pip`, see below.
 
 
-## Development installation
+## Development installation (Linux, pip)
 
 It is recommended to use a virtual environment for hacking on `brainview`. First, clone the repo:
 
@@ -39,7 +39,7 @@ Note: Once you have created the virtual environment, all you have to do is use i
 cd ~/develop/brainview             # replace with your repo root
 source env/bin/activate            # to activate the virtual environment
 
-pip install pyside2                # install qt bindings
+pip install pyside2                # install qt bindings, feel free to use another backend and its bindings
 some_other_command...              
 
 deactivate                         # to leave it
@@ -54,7 +54,16 @@ pip install --editable .           # installs brainview from the current directo
 
 You can now use the `brainview` module by typing `import brainload` in your python application or an interactive python session. Changes you make to the module source are applied automatically.
 
+## Development under MacOS (conda + pip)
 
+I ended up using `conda`. Install conda and follow the Linux instructions above to get the repo. Then:
+
+```console
+conda create -y --name brainview python=2.7
+conda activate brainview
+conda install -y matplotlib mayavi brainload
+pip install --editable .
+```
 
 ## Tests
 
