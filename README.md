@@ -1,12 +1,12 @@
 # brainview
-Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and mayavi.
+Simple Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and mayavi.
 
 
 ## About
 
-`brainview` is designed to visualize morphometry data in 3D on brain surfaces. The goal is to provide an easy-to-use interface to quickly visualize data loaded with [brainload](https://github.com/dfsp-spirit/brainload), [nibabel](http://nipy.org/nibabel/) or any other tool.
+`brainview` is designed to visualize arbitrary data in 3D on brain surface meshes (see the screenshots below for an example). The typical usage is to plot brain morphometry data loaded with [brainload](https://github.com/dfsp-spirit/brainload), [nibabel](http://nipy.org/nibabel/) or similar tools during interactive data analysis. But you could plot any data that assigns a scalar value to each vertex, of course. Note that brainload plots data, not colors, i.e., the colors are usually derived from a separate colormap.
 
-The module will only provide basic visualization functions intended for quick (and usually interactive) live inspection of your data. If you are interesting in a full solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead.
+IMPORTANT: Brainload only provides basic visualization functions intended for quick (and usually interactive) live inspection of your data. If you are interesting in a full-featured brain visualization solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead. Brainview is in no way intended to be a replacement for tools like PySurfer: it serves a different purpose.
 
 [![Build Status](https://travis-ci.org/dfsp-spirit/brainview.svg?branch=master)](https://travis-ci.org/dfsp-spirit/brainview)
 
@@ -39,7 +39,8 @@ It's a bit too early for that.
 
 ## Screenshots
 
-The smoothed mean curvature plotted on the white (left) and pial (right) surfaces of a human brain:
+The smoothed [mean curvature](https://en.wikipedia.org/wiki/Mean_curvature) at each vertex of the brain mesh, for the white (left) and pial (right) surfaces of a human brain:
+
 ![Curvature](./img/curvature.png?raw=true "Brain curvature white and pial")
 
 
@@ -49,10 +50,9 @@ The brainview module is designed to plot arbitrary per-vertex data onto brain me
 
 If you do not have your MRI data / FreeSurfer output at hand but still want to try `brainview`, you could use the `bert` example subject that comes with FreeSurfer. You can load the data using [brainload](https://github.com/dfsp-spirit/brainload) or [nibabel](http://nipy.org/nibabel/).
 
-
 ## Development and tests
 
-Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT file](develop/README_DEVELOPMENT.md) in this repository for instructions on installing the development version and running the tests.
+Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT file](README_DEVELOPMENT.md) in this repository for instructions on installing the development version and running the tests.
 
 
 ## Alternatives and similar tools
@@ -60,7 +60,7 @@ Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT
 Alternatives to `brainview`:
 
 - If you want a full brain visualization package for Python that allows you to plot morphometry data in various ways and in publication quality, you should definitely have a look at [PySurfer](https://pysurfer.github.io/).
-- If you have to use Matlab instead of Python, I can recommend [SurfStat](http://www.math.mcgill.ca/keith/surfstat/). It can do way more than visualization: it also features terms which allow you do conveniently formulate GLMs and it has support different mothods to detect clusters and correct for multiple comparisons.
+- If you have to use Matlab instead of Python, I can recommend [SurfStat](http://www.math.mcgill.ca/keith/surfstat/). It can do way more than visualization: it also features terms which allow you do conveniently formulate GLMs and it has support for different methods to detect spatial clusters of significant group differences, correct for multiple comparisons and more.
 
 ## License
 

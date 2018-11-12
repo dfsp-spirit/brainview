@@ -39,7 +39,7 @@ Note: Once you have created the virtual environment, all you have to do is use i
 cd ~/develop/brainview             # replace with your repo root
 source env/bin/activate            # to activate the virtual environment
 
-pip install pyside2                # install bindings
+pip install pyside2                # install qt bindings
 some_other_command...              
 
 deactivate                         # to leave it
@@ -49,7 +49,7 @@ Ensure that you are still in the repo root, then activate the virtual environmen
 
 ```console
 source env/bin/activate
-pip install --editable .           # installs brainview from the current directory, and grabs its dependencies from PyPI
+pip install --editable .           # installs brainview from the current directory, and grabs its dependencies from PyPI (including [brainload](https://github.com/dfsp-spirit/brainload))
 ```
 
 You can now use the `brainview` module by typing `import brainload` in your python application or an interactive python session. Changes you make to the module source are applied automatically.
@@ -75,23 +75,12 @@ The script downloads all required [neuroimaging test data from Github](https://g
 
 #### Running the tests
 
-There are several ways to run the tests. The easiest it to use the integration into `setup.py`, as this will install all test dependencies for you automatically. In the virtual environment and the top-level brainview directory, just run:
+Uuse the test integration into `setup.py`, as this will install all test dependencies for you automatically. In the virtual environment and the top-level brainview directory, just run:
 
 ```console
 python setup.py test
 ```
 
-If you want to run the tests manually, you need `pytest` and `pytest-cov`, both of which can be installed via `pip`. Then just run:
-
-```console
-pytest
-```
-
-To run the tests with code coverage:
-
-```console
-pytest --cov=src/
-```
 
 ### Continuous Integration
 
@@ -100,38 +89,7 @@ The tests are run automatically when you push to master and devs get results by 
 [![Build Status](https://travis-ci.org/dfsp-spirit/brainview.svg?branch=master)](https://travis-ci.org/dfsp-spirit/brainview)
 
 
-
 ## Packaging
-
-### Creating the release package
-
-Set the new version in `setup.py` and `src/brainview/__init__.py`:
-
-```console
-cd ~/develop/brainview/                       # repo root
-git checkout master
-git pull
-
-vim setup.py                                # update version
-vim src/brainview/__init__.py               # update version
-
-git add setup.py src/brainview/__init__.py
-git commit -m "Update version to 0.0.2."
-```
-
-Then make the release:
-
-```console
-pip install --upgrade setuptools wheel              # just make sure we have the latest versions
-rm -rf dist
-python setup.py sdist bdist_wheel --universal
-twine upload dist/*
-
-git tag -a v0.0.2 -m "Some annotation for this release."
-git push origin --tags
-```
-
-TODO: Add the generation and distribution of the documentation to this workflow.
 
 
 ### Building the `brainview` documentation
@@ -151,58 +109,3 @@ We will put the documentation online later (maybe on a GitHub page), but that do
 Note that if you added new modules in separate directories, for the documentation to show up,
 you will have to tell autodoc about the paths to the new directories by adding them to `sys.path`
 at the top of the `doc/conf.py` file.
-
-
-### Distributing the package
-
-
-We are following the [official Python packaging user guide](https://packaging.python.org/tutorials/packaging-projects/) here. First make sure you have the required tools:
-
-```console
-pip install --upgrade twine            # in the virtual env. Add `--user` if you prefer to do it outside.
-```
-
-#### PyPI testing
-
-```console
-twine upload --repository-url https://test.pypi.org/legacy/ dist/*     # will ask for your PyPI test credentials for brainview
-```
-
-Now try it in a fresh virtual environment (you may have to wait a sec for it to become available):
-
-```console
-deactivate                                  # leave current virtual env
-python -m virtualenv env_for_v2             # create a fresh one
-source env_for_v2/bin/activate              # activate it
-pip install --index-url https://test.pypi.org/simple/ brainview     # install it. now try the example client.
-```
-
-If it looks good, upload it to the real one:
-
-#### PyPI
-
-```console
-twine upload dist/*                           # will ask for your PyPI credentials for brainview
-```
-
-#### Anaconda (build and distribution)
-
-Not yet. This is WIP, see https://conda.io/docs/user-guide/tutorials/build-pkgs.html for instructions.
-
-Some work has already been done, see the files in `development/anaconda_dist`.
-
-Get the tools: install `conda` on your system and fire it up, then use it to get the build tools:
-
-```console
-conda install conda-build anaconda-client
-```
-
-Now, update the `meta.yaml` file with the build information, e.g., the files to include. This is the main step.
-
-When that is done, build and upload the package:
-
-```console
-conda build .                    # will output `full/path/to/package.tar.bz2`, e.g., `.../conda-bld/osx-64/brainview-0.1.1-py27_0.tar.bz2`
-anaconda login                   # will ask for your credentials
-anaconda upload full/path/to/package.tar.bz2
-```
