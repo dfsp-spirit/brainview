@@ -43,8 +43,11 @@ def _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometr
 
     Load the mesh as an `mlab.pipeline.triangular_mesh_source`. This is inspired by what is done in the _Hemisphere class of PySurfer. It was needed because when I used `mlab.triangular_mesh`, the colors were broken for some meshes.
     """
+    _print_data_description(vert_coords, faces, morphometry_data)
     kwargs_mesh_source = {'scalars': morphometry_data}
-    kwargs_surface = {'colormap': 'cool'}
+    #kwargs_mesh_source = {'scalars': np.arange(len(morphometry_data))}
+    #kwargs_surface = {'colormap': 'cool'}
+    kwargs_surface = {}
     x, y, z = st.coords_a2s(vert_coords)
     src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces, **kwargs_mesh_source)
     src_mesh.data.points = vert_coords
@@ -60,10 +63,53 @@ def _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometr
 
     # We modify the alpha channel to add a transparency gradient
     lut[:, -1] = np.linspace(0, 255, 256)
+
+    lut = _create_test_lut(len(morphometry_data))
     # and finally we put this LUT back in the surface object. We could have
     # added any 255*4 array rather than modifying an existing LUT.
     surf.module_manager.scalar_lut_manager.lut.table = lut
     mlab.draw()
+
+
+def _create_test_lut(num_values):
+    """
+    Create a color lookup table, uses RGBA with color values from 0 to 255.
+    """
+    lut = np.zeros((256, 4), dtype=int)
+    #lut[:, 0] = np.linspace(0, 255, 256) # R
+    #lut[:, 1] = np.linspace(0, 255, 256) # G
+    #lut[:, 2] = np.linspace(0, 255, 256) # B
+    #lut[:, 3] = np.linspace(0, 255, 256) # Alpha
+
+
+def scalars_from_label():
+    """
+    Create scalars from a FreeSurfer label file.
+
+    Create scalars (fake morphometry data) from a FreeSurfer label file. Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1.
+    """
+    pass
+
+
+def lut_from_annotation():
+        """
+        Create an mlab lookup table (LUT) from a FreeSurfer annotation file.
+
+        Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1, converts it to a better format, then creates the LUT from that.
+        """
+        annotation_to_vertcolormap()
+        pass
+
+def annotation_to_vertcolormap():
+    """
+    Converts the 3 arrays returned by the annot() function to a single array that directly lists the color for each vertex.
+    Maybe this should be part of brainload rather than brainvie.
+    """
+    pass
+
+def _print_data_description(vert_coords, faces, morphometry_data, print_tag="[data]"):
+    print "%s #verts=%d #faces=%d" % (print_tag, vert_coords.shape[0], faces.shape[0])
+    print "%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data))
 
 
 def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
@@ -91,7 +137,6 @@ def get_brain_view(vert_coords, faces, morphometry_data, **kwargs):
     surface: mayavi.modules.surface.Surface
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
-    print "min=%f max=%f" % (np.min(morphometry_data), np.max(morphometry_data))
     #return _get_mayavi_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
     return _get_surface_from_mlab_triangular_mesh_source(vert_coords, faces, morphometry_data, **kwargs)
 
