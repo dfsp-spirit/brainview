@@ -41,9 +41,17 @@ It's a bit too early for that.
 
 ## Screenshots
 
+### Morphometry data
+
 The smoothed [mean curvature](https://en.wikipedia.org/wiki/Mean_curvature) at each vertex of the brain mesh, for the white (left) and pial (right) surfaces of a human brain:
 
 ![Curvature](./img/curvature.png?raw=true "Brain curvature white and pial")
+
+### Annotations
+
+Two examples for visualization of annotations based on [cortical parcellations](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation) using different atlases: the Desikan-Killiany Atlas on the white surface (left), and the Destrieux Atlas on the pial surface (right) of the same subject.
+
+![Annotations](./img/atlas.png?raw=true "Annotations based on cortical parcellation")
 
 
 ## Obtaining suitable pre-processed sMRI input data for brainview

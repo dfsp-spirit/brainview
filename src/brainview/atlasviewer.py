@@ -71,7 +71,7 @@ def atlasviewer():
     else:
         if verbose:
             print("Loading label %s for subject %s from subjects dir %s: displaying on surface %s for hemisphere %s." % (data, subject_id, subjects_dir, surface, hemi))
-        verts_in_label, label_meta_data = bl.label(subject_id, subjects_dir, 'cortex', hemi=hemi, meta_data=morphometry_meta_data)
+        verts_in_label, label_meta_data = bl.label(subject_id, subjects_dir, data, hemi=hemi, meta_data=morphometry_meta_data)
         brain_mesh = bv.brain_label_view(fig, vert_coords, faces, verts_in_label)
 
 
