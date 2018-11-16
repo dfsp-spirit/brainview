@@ -37,77 +37,6 @@ def _get_surface_from_mlab_triangular_mesh(vert_coords, faces, **kwargs):
     return mayavi_mesh
 
 
-def _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, morphometry_data, **kwargs):
-    """
-    Load the data as a surface based on a triangular_mesh_source.
-
-    Load the mesh as an `mlab.pipeline.triangular_mesh_source`. This is inspired by what is done in the _Hemisphere class of PySurfer. It was needed because when I used `mlab.triangular_mesh`, the colors were broken for some meshes.
-    """
-    _print_data_description(vert_coords, faces, morphometry_data)
-    kwargs_mesh_source = {'scalars': morphometry_data}
-    #kwargs_mesh_source = {'scalars': np.arange(len(morphometry_data))}
-    kwargs_surface = {'colormap': 'cool'}
-    #kwargs_surface = {}
-    x, y, z = st.coords_a2s(vert_coords)
-    src_mesh = mlab.pipeline.triangular_mesh_source(x, y, z, faces, figure=fig, **kwargs_mesh_source)
-    #src_mesh.data.points = vert_coords
-    #mesh_dataset = src_mesh.mlab_source.dataset
-
-    #array_id = mesh_dataset.point_data.add_array(morphometry_data)
-    #mesh_dataset.point_data.get_array(array_id).name = array_id
-    #mesh_dataset.point_data.update()
-
-    # build visualization pipeline
-    #pipe = mlab.pipeline.set_active_attribute(mesh_dataset, point_scalars=array_id, figure=fig)
-    #if pipe.parent not in fig.children:
-    #    fig.add_child(pipe.parent)
-
-    src_mesh.update()
-    surf = mlab.pipeline.surface(src_mesh, figure=fig, reset_zoom=True, **kwargs_surface)
-    surf.actor.property.backface_culling = True
-
-    # set color LUT manually, see http://docs.enthought.com/mayavi/mayavi/auto/example_custom_colormap.html
-    lut_manager = surf.module_manager.scalar_lut_manager
-    lut = lut_manager.lut.table.to_array() # get current lut
-
-    # The lut is a 255x4 array, with the columns representing RGBA
-    # (red, green, blue, alpha) coded with integers going from 0 to 255.
-
-    # We modify the alpha channel to add a transparency gradient
-    #lut[:, -1] = np.linspace(0, 255, 256)
-
-    lut = _create_test_lut()
-    #lut_manager.load_lut_from_list(lut / 255.)
-    # and finally we put this LUT back in the surface object. We could have
-    # added any 255*4 array rather than modifying an existing LUT.
-    lut_manager.lut.table = lut
-    fig.render()
-    mlab.draw()
-
-
-def _create_test_lut():
-    """
-    Create a color lookup table, uses RGBA with color values from 0 to 255.
-    """
-    num_values = 256
-    lut = np.ones((num_values, 4), dtype=int)
-    #lut[:, 0] = np.arange(num_values) # R
-    #lut[:, 1] = np.arange(num_values) # G
-    #lut[:, 2] = np.arange(num_values) # B
-    #lut[:, 3] = np.ones(num_values, np.int) * 255 # Alpha
-
-    #lut[0:50000, 0] = np.ones(50000, np.int) * 50
-    #lut[50000:100000, 0] = np.ones(50000, np.int) * 150
-
-    red = np.array([255, 10, 10, 255]) # defines a color as RGBA
-    green = np.array([10, 255, 10, 255])
-    blue = np.array([10, 10, 255, 255])
-    lut[0:50, :] = red
-    lut[50:150, :] = green
-    lut[150:, :] = blue
-    return lut
-
-
 def _print_data_description(vert_coords, faces, morphometry_data, print_tag="[data]"):
     print "%s #verts=%d #faces=%d" % (print_tag, vert_coords.shape[0], faces.shape[0])
     print "%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data))
@@ -127,14 +56,14 @@ def brain_label_view(fig, vert_coords, faces, verts_in_label):
     return brain_morphometry_view(fig, vert_coords, faces, label_map)
 
 
-def brain_atlas_view_simple(fig, vert_coords, faces, vertex_labels, label_colors, label_names):
+def _brain_atlas_view_simple(fig, vert_coords, faces, vertex_labels, label_names):
     """
     View the vertices which are part of an annotation, usually a brain atlas.
 
     View the vertices which are part of an annotation, usually a brain atlas. An atlas consists of several sets of vertices, each of which is assigned a color and a label. This simple version just assigns random colors to each set, ignoring the given color list.
     """
     num_verts = vert_coords.shape[0]
-    num_labels = len(label_colors)
+    num_labels = len(label_names)
     # create fake morphometry data from the label: set all values for vertices in the label to 1.0, the rest to 0.0
     label_map = np.zeros((num_verts), dtype=float)
     for idx, value in enumerate(label_names):
@@ -151,15 +80,15 @@ def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label
     num_verts = vert_coords.shape[0]
     num_labels = len(label_names)
     label_map = np.zeros((num_verts), dtype=float)
-    lut = np.ones((num_labels, 4), dtype=int)
+    lut = np.ones((num_labels, 4), dtype=int)       # create color lookup table
     for idx, value in enumerate(label_names):
         label_map[vertex_labels == idx] = (idx + 1.0)
-        lut[idx, 0:3] = label_colors[idx][0:3]
-        lut[idx, 3] = 255 - label_colors[idx][3]
+        lut[idx, 0:3] = label_colors[idx][0:3]      # Set RGB values.
+        lut[idx, 3] = 255 - label_colors[idx][3]    # Set alpha channel: this is stored as a transparency in the source data, so we convert it to alpha.
     surf = brain_morphometry_view(fig, vert_coords, faces, label_map)
 
     lut_manager = surf.module_manager.scalar_lut_manager
-    lut_manager.lut.table = lut
+    lut_manager.lut.table = lut         # use our lut
 
     fig.render()
     mlab.draw()
