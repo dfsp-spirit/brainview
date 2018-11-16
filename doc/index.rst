@@ -1,8 +1,3 @@
-.. brainview documentation master file, created by
-   sphinx-quickstart on Mon Oct  8 14:26:49 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to brainview's documentation!
 =====================================
 
@@ -11,6 +6,8 @@ Welcome to brainview's documentation!
    :caption: Contents:
 
    brainview
+   commandline
+   interactive
 
 
 Indices and tables
