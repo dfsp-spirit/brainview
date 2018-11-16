@@ -7,7 +7,8 @@ import brainview as bv
 import argparse
 
 # To run this in dev mode (in virtual env, pip -e install of brainview active) from REPO_ROOT:
-# PYTHONPATH=./src/brainview python src/brainview/brainviewer.py tim -d ~/data/tim_only/
+# PYTHONPATH=./src/brainview python src/brainview/atlasviewer.py tim label Median_wall -d ~/data/tim_only/ -i
+# PYTHONPATH=./src/brainview python src/brainview/atlasviewer.py tim atlas aparc -d ~/data/tim_only/ -i
 
 def atlasviewer():
     """
@@ -65,7 +66,7 @@ def atlasviewer():
     if mode == 'atlas':
         if verbose:
             print("Loading atlas %s for subject %s from subjects dir %s: displaying on surface %s for hemisphere %s." % (data, subject_id, subjects_dir, surface, hemi))
-        vertex_labels, label_colors, label_names, atlas_meta_data = bl.annot(subject_id, data, subjects_dir=subjects_dir, hemi=hemi, orig_ids=False)
+        vertex_labels, label_colors, label_names, atlas_meta_data = bl.annot(subject_id, subjects_dir, data, hemi=hemi, orig_ids=False)
         brain_mesh = bv.brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label_names)
     else:
         if verbose:

@@ -121,11 +121,25 @@ def brain_label_view(fig, vert_coords, faces, verts_in_label):
     """
     num_verts = vert_coords.shape[0]
     num_verts_in_label = len(verts_in_label)
-    # create fake morphometry data from the label
+    # create fake morphometry data from the label: set all values for vertices in the label to 1.0, the rest to 0.0
     label_map = np.zeros((num_verts), dtype=float)
     label_map[verts_in_label] = 1.0
     return brain_morphometry_view(fig, vert_coords, faces, label_map)
 
+
+def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label_names):
+    """
+    View the vertices which are part of an annotation, usually a brain atlas.
+
+    View the vertices which are part of an annotation, usually a brain atlas. An atlas consists of several sets of vertices, each of which is assigned a color and a label. This simple version just assigns random colors to each set, ignoring the given color list.
+    """
+    num_verts = vert_coords.shape[0]
+    num_labels = len(label_colors)
+    # create fake morphometry data from the label: set all values for vertices in the label to 1.0, the rest to 0.0
+    label_map = np.zeros((num_verts), dtype=float)
+    for idx, value in enumerate(label_names):
+        label_map[vertex_labels == idx] = (idx + 1.0)
+    return brain_morphometry_view(fig, vert_coords, faces, label_map)
 
 
 def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
@@ -157,8 +171,8 @@ def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
     morphometry_data = morphometry_data.astype(float)
-    #return _get_surface_from_mlab_triangular_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
-    return _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, morphometry_data, **kwargs)
+    return _get_surface_from_mlab_triangular_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
+    #return _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, morphometry_data, **kwargs)
 
 
 def activate_overlay(meta_data):
