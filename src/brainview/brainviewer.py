@@ -10,6 +10,11 @@ import argparse
 # PYTHONPATH=./src/brainview python src/brainview/brainviewer.py tim -d ~/data/tim_only/
 
 def brainviewer():
+    """
+    Brain morphometry data viewer.
+
+    A viewer for morphometry data. Supports data from the subject itself and subject data that has been mapped to a common subject like fsaverage.
+    """
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="View brains.")
@@ -22,7 +27,7 @@ def brainviewer():
     parser.add_argument("-a", "--average-subject", help="The common or average subject to use. String, defaults to 'fsaverage'. Ignored unless -c is active.", default="fsaverage")
     parser.add_argument("-f", "--fwhm", help="The smoothing or fwhm setting to use for the common subject measure. String, defaults to '10'. Ignored unless -c is active.", default="10")
     parser.add_argument("-i", "--interactive", help="Display brain plot in an interactive window.", action="store_true")
-    parser.add_argument("-o", "--outputfile", help="Output image file name. String, defaults to 'brain.png'.", default="brain.png")
+    parser.add_argument("-o", "--outputfile", help="Output image file name. String, defaults to 'brain_morphometry.png'.", default="brain_morphometry.png")
     parser.add_argument("-v", "--verbose", help="Increase output verbosity.", action="store_true")
     args = parser.parse_args()
 

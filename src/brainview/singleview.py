@@ -113,6 +113,21 @@ def _print_data_description(vert_coords, faces, morphometry_data, print_tag="[da
     print "%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data))
 
 
+def brain_label_view(fig, vert_coords, faces, verts_in_label):
+    """
+    View the vertices which are part of a label.
+
+    View the vertices which are part of a label.
+    """
+    num_verts = vert_coords.shape[0]
+    num_verts_in_label = len(verts_in_label)
+    # create fake morphometry data from the label
+    label_map = np.zeros((num_verts), dtype=float)
+    label_map[verts_in_label] = 1.0
+    return brain_morphometry_view(fig, vert_coords, faces, label_map)
+
+
+
 def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
     """
     Create a mayavi mesh from data.
