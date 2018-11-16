@@ -21,8 +21,11 @@ if not os.path.isdir(src_path):
 sys.path.insert(0, src_path)
 
 
-# -- Project information -----------------------------------------------------
+# For some reason we need to mock this, otherwise autodoc fails. See https://github.com/sphinx-doc/sphinx/issues/4182 for a similar case.
 autodoc_mock_imports = ['brainload.spatial']
+
+
+# -- Project information -----------------------------------------------------
 project = u'brainview'
 copyright = u'2018, Tim Schäfer'
 author = u'Tim Schäfer'

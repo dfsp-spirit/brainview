@@ -10,6 +10,14 @@ def get_config():
     Retrieve the brainload configuration.
 
     Tries to load the configuration from the default config file location. If that file does not exist, uses internal defaults.
+
+    Returns
+    -------
+    SafeConfigParser
+        A config parser that contains Brainview configuration information. If the file `~/.brainloadrc` exists, the config gets loaded from that file. The file is expected to be in INI format. Otherwise, internal defaults settings are used. The config contains the following settings:
+            - Section `figure`
+                - width: the figure width in pixels. Defaults to 800.
+                - height: the figure height in pixels. Defaults to 600.
     """
     default_config_file = get_default_config_filename()
     if os.path.isfile(default_config_file):
@@ -30,7 +38,17 @@ def write_default_config(config_file=None):
 
 
 def get_default_config_filename():
-    return '.brainloadrc'
+    """
+    Return the path to the Brainview default config file.
+
+    Return the path to the Brainview default config file.
+
+    Returns
+    -------
+    string
+        The path to the Brainview default config file. This does not imply that the file exists.
+    """
+    return os.path.join(os.getenv('HOME', ''), '.brainloadrc')
 
 
 def get_config_from_file(settings_file):
