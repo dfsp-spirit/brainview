@@ -19,13 +19,10 @@ This is pre-alpha and not ready for usage yet. Come back another day.
 
 ## Interface (WIP)
 
-#### API
-
-Not yet.
 
 #### Command line
 
-The package comes with an example client: after installing `brainview`, you can use the `brainviewer` command from your shell to visualize data. Run `brainviewer --help` to see all available options.
+The package comes with an example client: after installation, you can use the `brainviewer` and `atlasviewer` commands from your shell.
 
 If you have FreeSurfer installed and want to interactively inspect the curvature for `bert`, a Freesurfer example subject, try:
 
@@ -33,10 +30,15 @@ If you have FreeSurfer installed and want to interactively inspect the curvature
 brainviewer bert -d "$FREESURFER_HOME" -m curv -i
 ```
 
+You can run both programs with `--help` to get help, and find some examples in the documentation.
+
 
 ## Documentation
 
-It's a bit too early for that.
+A first draft of the Brainview documentation is now available:
+
+[Brainview documentation](http://dfsp-spirit.github.io/brainview)
+
 
 
 ## Screenshots
