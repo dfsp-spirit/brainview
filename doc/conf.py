@@ -22,7 +22,7 @@ sys.path.insert(0, src_path)
 
 
 # -- Project information -----------------------------------------------------
-
+autodoc_mock_imports = ['brainload.spatial']
 project = u'brainview'
 copyright = u'2018, Tim Schäfer'
 author = u'Tim Schäfer'
