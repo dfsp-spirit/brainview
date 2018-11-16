@@ -46,7 +46,26 @@ def brain_label_view(fig, vert_coords, faces, verts_in_label):
     """
     View the vertices which are part of a label.
 
-    View the vertices which are part of a label.
+    View the vertices which are part of a label. A label is a nothing but a set of vertices.
+
+    Parameters
+    ----------
+    fig: figure handle
+        The figure the surface should be added to
+
+    vert_coords: 2D numpy array of shape (n_verts, 3)
+        An array of vertex corrdinates. Each vertex position is identified by an x, y, and z coordinate.
+
+    faces: 2D numpy array of shape (n_faces, 3)
+        An array of 3-faces, i.e., each face has to consists of 3 vertices. The 3 vertices are indices into the vert_coords array.
+
+    verts_in_label: ndarray, shape (m_vertices,)
+        An array containing the indices of all vertices which are part of the label. All other vertices are assumed not to be part of the label.
+
+    Returns
+    -------
+    surface: mayavi.modules.surface.Surface
+        The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
     num_verts = vert_coords.shape[0]
     num_verts_in_label = len(verts_in_label)
@@ -61,6 +80,28 @@ def _brain_atlas_view_simple(fig, vert_coords, faces, vertex_labels, label_names
     View the vertices which are part of an annotation, usually a brain atlas.
 
     View the vertices which are part of an annotation, usually a brain atlas. An atlas consists of several sets of vertices, each of which is assigned a color and a label. This simple version just assigns random colors to each set, ignoring the given color list.
+
+    Parameters
+    ----------
+    fig: figure handle
+        The figure the surface should be added to
+
+    vert_coords: 2D numpy array of shape (n_verts, 3)
+        An array of vertex corrdinates. Each vertex position is identified by an x, y, and z coordinate.
+
+    faces: 2D numpy array of shape (n_faces, 3)
+        An array of 3-faces, i.e., each face has to consists of 3 vertices. The 3 vertices are indices into the vert_coords array.
+
+    vertex_labels: ndarray, shape (n_vertices,)
+        An array containing the index (for each vertex) into the label_colors and label_names datastructures to retrieve the color and name. If some vertex has no annotation, -1 must be set for it.False.)
+
+    label_names: list of strings
+       The names of the labels. The length of the list is n_labels.
+
+    Returns
+    -------
+    surface: mayavi.modules.surface.Surface
+        The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
     num_verts = vert_coords.shape[0]
     num_labels = len(label_names)
@@ -76,6 +117,31 @@ def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label
     View the vertices which are part of an annotation using the annotation colors.
 
     View the vertices which are part of an annotation, usually a brain atlas. An atlas consists of several sets of vertices, each of which is assigned a color and a label. This version uses the color list.
+
+    Parameters
+    ----------
+    fig: figure handle
+        The figure the surface should be added to
+
+    vert_coords: 2D numpy array of shape (n_verts, 3)
+        An array of vertex corrdinates. Each vertex position is identified by an x, y, and z coordinate.
+
+    faces: 2D numpy array of shape (n_faces, 3)
+        An array of 3-faces, i.e., each face has to consists of 3 vertices. The 3 vertices are indices into the vert_coords array.
+
+    vertex_labels: ndarray, shape (n_vertices,)
+        An array containing the index (for each vertex) into the label_colors and label_names datastructures to retrieve the color and name. If some vertex has no annotation, -1 must be set for it.False.)
+
+    label_colors: ndarray, shape (n_labels, 4)
+        RGBT + label id colortable array. The first 4 values encode the label color: RGB is red, green, blue as usual, from 0 to 255 per value. T is the transparency, which is defined as 255 - alpha. If the array has more than 4 entries, all others are ignored.
+
+    label_names: list of strings
+       The names of the labels. The length of the list is n_labels.
+
+    Returns
+    -------
+    surface: mayavi.modules.surface.Surface
+        The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
     """
     num_verts = vert_coords.shape[0]
     num_labels = len(label_names)
@@ -96,9 +162,9 @@ def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label
 
 def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
     """
-    Create a mayavi mesh from data.
+    Create a surface from the mesh and morphometry data.
 
-    Create a mayavi mesh from the vert_coords, faces and morphometry_data. Additional keyword arguments will be passed on to the call to the mlab.triangular_mesh function.
+    Create an mlab surface from the vert_coords, faces and morphometry_data. Additional keyword arguments will be passed on to the call to the `mlab.triangular_mesh` function.
 
     Parameters
     ----------
@@ -115,7 +181,7 @@ def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
         Assigns a scalar value to each vertex.
 
     kwargs: extra keyword arguments
-        Will be passed on to the call to the mayavi mesh function.
+        Will be passed on to the call to the `mlab.triangular_mesh` function from Mayavi.
 
     Returns
     -------
@@ -127,7 +193,7 @@ def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
     #return _get_surface_from_mlab_triangular_mesh_source(fig, vert_coords, faces, morphometry_data, **kwargs)
 
 
-def activate_overlay(meta_data):
+def _activate_overlay(meta_data):
     """
     Display a very simple meta_data overlay in the current view.
 
