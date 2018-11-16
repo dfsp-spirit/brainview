@@ -1,5 +1,5 @@
 """
-Functions to display morphometry data in 3D on brain surface meshes.
+Functions to display morphometry data, labels and annotations in 3D on brain surface meshes.
 
 These functions provide a single view.
 """
@@ -238,7 +238,7 @@ def export_figure(fig_handle, export_file_name_with_extension, silent=False, **k
 
 def show():
     """
-    Display the currently active mayavi scene in an interactive window.
+    Display the currently active Mayavi scene in an interactive window.
 
     Render and display the currently active mayavi scene in an interactive window. This requires a GUI and a working setup of matplotlib with proper backend configuration on the machine. Currently does nothing but to call `mlab.show()`.
     """
