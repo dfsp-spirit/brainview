@@ -127,7 +127,7 @@ def brain_label_view(fig, vert_coords, faces, verts_in_label):
     return brain_morphometry_view(fig, vert_coords, faces, label_map)
 
 
-def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label_names):
+def brain_atlas_view_simple(fig, vert_coords, faces, vertex_labels, label_colors, label_names):
     """
     View the vertices which are part of an annotation, usually a brain atlas.
 
@@ -140,6 +140,29 @@ def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label
     for idx, value in enumerate(label_names):
         label_map[vertex_labels == idx] = (idx + 1.0)
     return brain_morphometry_view(fig, vert_coords, faces, label_map)
+
+
+def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label_names):
+    """
+    View the vertices which are part of an annotation using the annotation colors.
+
+    View the vertices which are part of an annotation, usually a brain atlas. An atlas consists of several sets of vertices, each of which is assigned a color and a label. This version uses the color list.
+    """
+    num_verts = vert_coords.shape[0]
+    num_labels = len(label_names)
+    label_map = np.zeros((num_verts), dtype=float)
+    lut = np.ones((num_labels, 4), dtype=int)
+    for idx, value in enumerate(label_names):
+        label_map[vertex_labels == idx] = (idx + 1.0)
+        lut[idx, 0:3] = label_colors[idx][0:3]
+        lut[idx, 3] = 255 - label_colors[idx][3]
+    surf = brain_morphometry_view(fig, vert_coords, faces, label_map)
+
+    lut_manager = surf.module_manager.scalar_lut_manager
+    lut_manager.lut.table = lut
+
+    fig.render()
+    mlab.draw()
 
 
 def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
