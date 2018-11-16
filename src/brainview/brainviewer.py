@@ -17,7 +17,7 @@ def brainviewer():
     """
 
     # Parse command line arguments
-    parser = argparse.ArgumentParser(description="View brains.")
+    parser = argparse.ArgumentParser(description="View brain morphometry data.")
     parser.add_argument("subject", help="The subject you want to load. String, a directory under the subjects_dir.")
     parser.add_argument("-d", "--subjects_dir", help="The subjects_dir containing the subject. Defaults to environment variable SUBJECTS_DIR.", default="")
     parser.add_argument("-m", "--measure", help="The measure to load. String, defaults to 'area'. ", default="area")

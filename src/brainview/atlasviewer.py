@@ -18,7 +18,7 @@ def atlasviewer():
     """
 
     # Parse command line arguments
-    parser = argparse.ArgumentParser(description="View brains.")
+    parser = argparse.ArgumentParser(description="View brain label data or brain annotation / atlas  data.")
     parser.add_argument("subject", help="The subject you want to load. String, a directory under the subjects_dir.")
     parser.add_argument("mode", help="The mode. One of ('atlas', 'label').")
     parser.add_argument("data", help="The data to load from the label dub dir of the subject, without the ?h part and the file extensions. If mode is 'atlas', something like 'aparc'. If mode is 'label', something like 'cortex'.")
