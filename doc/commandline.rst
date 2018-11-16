@@ -61,7 +61,21 @@ In this example, we will load the Mean Curvature of a brain mesh from the files 
 
     brainviewer subject1 -d ~/data/study1/ -m curv -i
 
-This will open an interactive window. You can move the camera (mouse), zoom
+This will open an interactive window. You can control the camera as explained in `Camera controls in interactive Brainview windows`. It will also produce a file named `brain_morphometry.png` in the current directory that contains a view of the scene.
+
+
+Display the surface area per vertex of a subject mapped to fsaverage non-interactively
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this example, we will load the surface area per vertex for a subject, mapped to the common subject fsaverage. The data will be loaded from the files ``?l.area.fwhm10.fsaverage.mgh``.
+
+.. code:: console
+
+    brainviewer subject1 -d ~/data/study1/ -m area -fwhm 10 -c
+
+This will NOT open an interactive window, it will only produce a file named `brain_morphometry.png` in the current directory.
+
+
 
 Atlasviewer
 -----------
@@ -102,3 +116,27 @@ To get help on the program, run ```atlasviewer --help```. The output will look l
                             Output image file name. String, defaults to
                             'brain_<mode>.png'.
       -v, --verbose         Increase output verbosity.
+
+
+Display the medial wall label for a subject
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this example, we will load the label `?h.Medial_wall.label` for a subject. A label is just a set of vertices.
+
+.. code:: console
+
+    atlasviewer subject1 label Medial_wall -d ~/data/study1/ -i
+
+This will open an interactive window. You can control the camera as explained in `Camera controls in interactive Brainview windows`. It will also produce a file named `brain_label.png` in the current directory that contains a view of the scene.
+
+
+Display the cortical parcellation using the Desikan atlas for a subject
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We visualize the cortical parcellation using the Desikan atlas for the fsaverage subject. The data will be loaded from the files `?h.aparc.annot`.
+
+.. code:: console
+
+    atlasviewer subject1 atlas aparc -d ~/data/study1/ -i
+
+This will open an interactive window. You can control the camera as explained in `Camera controls in interactive Brainview windows`. It will also produce a file named `brain_atlas.png` in the current directory that contains a view of the scene.
