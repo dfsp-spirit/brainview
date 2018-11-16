@@ -4,6 +4,7 @@ import numpy as np
 import mayavi.mlab as mlab
 import brainload as bl
 import brainview as bv
+import mayavi
 
 mlab.options.offscreen = True
 
@@ -22,5 +23,7 @@ def test_brainload_works_and_testdata_exists():
 
 def test_brain_view_single_gets_created():
     vert_coords, faces, morphometry_data, meta_data = bl.subject('subject1', subjects_dir=TEST_DATA_DIR)
-    fig = mlab.figure(1, bgcolor=(0, 0, 0), size=(800, 600))
-    brain_mesh = bv.singleview.get_brain_view(fig, vert_coords, faces, morphometry_data)
+    fig = mlab.figure(bgcolor=(0, 0, 0), size=(800, 600))
+    surface = bv.brain_morphometry_view(fig, vert_coords, faces, morphometry_data)
+    assert type(fig) == mayavi.core.scene.Scene
+     #assert type(surface) == mayavi.modules.surface.Surface

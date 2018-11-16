@@ -108,39 +108,12 @@ def _create_test_lut():
     return lut
 
 
-def scalars_from_label():
-    """
-    Create scalars from a FreeSurfer label file.
-
-    Create scalars (fake morphometry data) from a FreeSurfer label file. Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1.
-    """
-    pass
-
-
-def lut_and_data_from_annotation(vertex_labels, label_colors, label_names):
-    """
-    Create an mlab lookup table (LUT) from a FreeSurfer annotation file.
-
-    Useful to visualize all vertices included in the label. Loads the label using brainload >= 0.3.1, converts it to a better format, then creates the LUT from that.
-    """
-    annotation_to_vertcolormap()
-    pass
-
-
-def annotation_to_vertcolormap():
-    """
-    Converts the 3 arrays returned by the annot() function to a single array that directly lists the color for each vertex.
-    Maybe this should be part of brainload rather than brainview.
-    """
-    pass
-
-
 def _print_data_description(vert_coords, faces, morphometry_data, print_tag="[data]"):
     print "%s #verts=%d #faces=%d" % (print_tag, vert_coords.shape[0], faces.shape[0])
     print "%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data))
 
 
-def get_brain_view(fig, vert_coords, faces, morphometry_data, **kwargs):
+def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
     """
     Create a mayavi mesh from data.
 
