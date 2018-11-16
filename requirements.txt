@@ -11,10 +11,10 @@ pytest
 pytest-cov
 pytest-runner
 
-## The following packages are needed for building the documentation
+## The following packages are needed for building the documentation only. We currently do not do that on Travis.
 #sphinx
 #sphinx-rtd-theme
 
-# The following are required to get mayavi working locally, but requesting them in travis breaks the build
+## The following are required to get Mayavi working locally, but requesting them in Travis breaks the build.
 #PyQt5
 #pyside2
