@@ -35,17 +35,6 @@ def get_config():
         return get_default_config()
 
 
-def write_default_config(config_file=None):
-    """
-    Write the default config to a config file in INI format.
-    """
-    if config_file is None:
-        config_file = get_default_config_filename()
-    config = get_default_config()
-    with open(config_file, 'wb') as cf:
-        config.write(cf)
-
-
 def get_default_config_filename():
     """
     Return the path to the Brainview default config file.
@@ -66,12 +55,14 @@ def get_default_config_filename():
     return os.path.join(os.getenv('HOME', ''), '.brainloadrc')
 
 
-def get_config_from_file(settings_file):
+def get_config_from_file(ini_file):
     """
     Returns a config parsed from an INI file. Currently, the file has to supply all required settings.
     """
+    if not os.path.isfile(ini_file):
+        raise ValueError("Config file '%s' does not exist. Must be a readable file in INI format." % ini_file)
     config = SafeConfigParser()
-    config.read(settings_file)
+    config.read(ini_file)
     return config
 
 
