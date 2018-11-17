@@ -16,8 +16,17 @@ def get_config():
     SafeConfigParser
         A config parser that contains Brainview configuration information. If the file `~/.brainloadrc` exists, the config gets loaded from that file. The file is expected to be in INI format. Otherwise, internal defaults settings are used. The config contains the following settings:
             - Section `figure`
-                - width: the figure width in pixels. Defaults to 800.
-                - height: the figure height in pixels. Defaults to 600.
+                - width: int, the figure width in pixels. Defaults to 800.
+                - height: int, the figure height in pixels. Defaults to 600.
+
+    Examples
+    --------
+    Print the setting `width` from the section `figure` in the settings:
+
+    >>> import brainview as bv
+    >>> cfg = bv.get_config()
+    >>> print cfg.getint('figure', 'width')
+    800
     """
     default_config_file = get_default_config_filename()
     if os.path.isfile(default_config_file):
@@ -47,13 +56,19 @@ def get_default_config_filename():
     -------
     string
         The path to the Brainview default config file. This does not imply that the file exists.
+
+    Examples
+    --------
+    >>> import brainview as bv
+    >>> print bv.get_default_config_filename()
+    /home/me/.brainloadrc
     """
     return os.path.join(os.getenv('HOME', ''), '.brainloadrc')
 
 
 def get_config_from_file(settings_file):
     """
-    Returns a config parsed from an INI. Currently, the file has to supply all required settings.
+    Returns a config parsed from an INI file. Currently, the file has to supply all required settings.
     """
     config = SafeConfigParser()
     config.read(settings_file)
