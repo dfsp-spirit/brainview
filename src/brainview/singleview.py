@@ -66,6 +66,21 @@ def brain_label_view(fig, vert_coords, faces, verts_in_label):
     -------
     surface: mayavi.modules.surface.Surface
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
+
+    Examples
+    --------
+    Load a label file using brainload and visualize it on the surface mesh of a subject:
+
+    >>> import brainload as bl; import brainview as bv; import os
+    >>> subjects_dir = os.getenv('SUBJECTS_DIR')   # or whatever
+    >>> subject = 'subject1'
+    >>> vert_coords, faces, morphometry_data, morphometry_meta_data = bl.subject(subject, subjects_dir=subjects_dir, load_morphometry_data=False)      # load mesh
+    >>> verts_in_label, label_meta_data = bl.label(subject, subjects_dir, 'Medial_wall', meta_data=morphometry_meta_data)                               # load label
+    >>> fig = mlab.figure('Some title', bgcolor=(1, 1, 1), size=(800, 600))             # create figure and scene
+    >>> surface = bv.brain_label_view(fig, vert_coords, faces, verts_in_label)          # create an mlab mesh and add it to the scene
+    >>> bv.show()                                                                       # open figure in interactive window
+
+    This will get you a view of the labels on the brain mesh of the subject.
     """
     num_verts = vert_coords.shape[0]
     num_verts_in_label = len(verts_in_label)
@@ -142,6 +157,21 @@ def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label
     -------
     surface: mayavi.modules.surface.Surface
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
+
+    Examples
+    --------
+    Load an annotation file using brainload and visualize it on the surface mesh of a subject. In this case, we are loading the cortical parcellation based on the Desikan atlas:
+
+    >>> import brainload as bl; import brainview as bv; import os
+    >>> subjects_dir = os.getenv('SUBJECTS_DIR')   # or whatever
+    >>> subject = 'subject1'
+    >>> vert_coords, faces, morphometry_data, morphometry_meta_data = bl.subject(subject, subjects_dir=subjects_dir, load_morphometry_data=False)      # load mesh
+    >>> vertex_labels, label_colors, label_names, atlas_meta_data = bl.annot(subject, subjects_dir, 'aparc')                 # load annotation
+    >>> fig = mlab.figure('Some title', bgcolor=(1, 1, 1), size=(800, 600))                                     # create figure and scene
+    >>> brain_mesh = bv.brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label_names)     # create an mlab mesh and add it to the scene
+    >>> bv.show()                                                                                               # open figure in interactive window
+
+    This will get you a view of the annotation on the brain mesh of the subject.
     """
     num_verts = vert_coords.shape[0]
     num_labels = len(label_names)
@@ -187,6 +217,20 @@ def brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **kwargs):
     -------
     surface: mayavi.modules.surface.Surface
         The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
+
+    Examples
+    --------
+    Load cortical thickness data for a subject and visualize it:
+
+    >>> import brainload as bl; import brainview as bv; import os
+    >>> subjects_dir = os.getenv('SUBJECTS_DIR')   # or whatever
+    >>> subject = 'subject1'
+    >>> vert_coords, faces, morphometry_data, morphometry_meta_data = bl.subject(subject, subjects_dir=subjects_dir, measure='thickness')      # load mesh and morphometry data
+    >>> fig = mlab.figure('Some title', bgcolor=(1, 1, 1), size=(800, 600))                                     # create figure and scene
+    >>> brain_mesh = bv.brain_morphometry_view(fig, vert_coords, faces, vertex_labels, morphometry_data)        # create an mlab mesh and add it to the scene
+    >>> bv.show()                                                                                               # open figure in interactive window
+
+    This will get you a view of the morphometry data on the brain mesh of the subject.
     """
     morphometry_data = morphometry_data.astype(float)
     return _get_surface_from_mlab_triangular_mesh(vert_coords, faces, scalars=morphometry_data, **kwargs)
