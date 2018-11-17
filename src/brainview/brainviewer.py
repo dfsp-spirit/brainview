@@ -84,6 +84,8 @@ def brainviewer():
             print "Interactive mode set, displaying brain plot in interactive window."
         bv.show()
 
+    return True
+
 
 if __name__ == "__main__":
     brainviewer()

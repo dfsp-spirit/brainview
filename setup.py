@@ -22,13 +22,14 @@ setup(
           'Programming Language :: Python :: 2.7'],
     license='MIT',
     setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-cov'],
+    tests_require=['pytest', 'pytest-cov', 'pytest-console-scripts'],
     install_requires=['numpy', 'nibabel', 'matplotlib', 'mayavi', 'vtk', 'brainload'],
     package_dir = {'': 'src'},                               # The root directory that contains the source for the modules (relative to setup.py) is ./src/
     zip_safe=False,
     entry_points={
     'console_scripts': [
         'brainviewer = brainview.brainviewer:brainviewer',
+        'atlasviewer = brainview.atlasviewer:atlasviewer',
     ],
 },
 )
