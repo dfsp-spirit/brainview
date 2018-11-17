@@ -39,7 +39,7 @@ def get_default_config_filename():
     """
     Return the path to the Brainview default config file.
 
-    Return the path to the Brainview default config file.
+    Return the path to the Brainview default config file. The file must be in INI format.
 
     Returns
     -------
