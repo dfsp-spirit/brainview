@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import sys
 import numpy as np
 import brainload as bl
 import mayavi.mlab as mlab
@@ -81,6 +82,8 @@ def atlasviewer():
         if verbose:
             print "Interactive mode set, displaying brain plot in interactive window."
         bv.show()
+
+    sys.exit(0)
 
 
 if __name__ == "__main__":
