@@ -60,7 +60,7 @@ def atlasviewer():
     mlab.options.offscreen = not interactive
 
     vert_coords, faces, morphometry_data, morphometry_meta_data = bl.subject(subject_id, subjects_dir=subjects_dir, surf=surface, hemi=hemi, load_morphometry_data=False)
-    fig_title = 'Brainviewer: %s: %s on surface %s' % (subject_id, data, surface)
+    fig_title = 'Atlasviewer: %s: %s on surface %s' % (subject_id, data, surface)
     cfg = bv.get_config()
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(cfg.getint('figure', 'width'), cfg.getint('figure', 'height')))
 
