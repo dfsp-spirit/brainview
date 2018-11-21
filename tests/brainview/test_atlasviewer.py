@@ -3,6 +3,7 @@
 # These tests require the package `pytest-console-scripts`.
 
 import os
+import pytest
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 TEST_DATA_DIR = os.path.join(THIS_DIR, os.pardir, 'test_data')

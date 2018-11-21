@@ -6,6 +6,7 @@ import brainload as bl
 import brainview as bv
 import brainview.multiview as mv
 import mayavi
+import pytest
 
 mlab.options.offscreen = True
 
