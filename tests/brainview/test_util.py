@@ -33,3 +33,10 @@ def test_get_config_from_file():
     assert cfg.has_section('figure') == True
     assert cfg.getint('figure', 'width') == 900
     assert cfg.getint('figure', 'height') == 400
+
+
+def test_get_config_from_file_raises_on_missing_file():
+    missing_cfg_file = os.path.join(TEST_DATA_DIR, 'brainviewrc_not_there')
+    with pytest.raises(ValueError) as exc_info:
+        cfg = ut.get_config_from_file(missing_cfg_file)
+    assert 'not_there' in str(exc_info.value)

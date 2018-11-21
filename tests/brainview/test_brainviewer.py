@@ -1,6 +1,6 @@
 # Tests for the brainviewer script.
 #
-# These tests require the pacakge `pytest-console-scripts` from PyPI.
+# These tests require the package `pytest-console-scripts`.
 
 import os
 
