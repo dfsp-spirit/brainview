@@ -24,10 +24,52 @@ def test_brainviewer_subject1_curv_white_both_native(script_runner):
     assert ret.stderr == ''
 
 
-def test_brainviewer_subject1_area_white_both_native(script_runner):
+def test_brainviewer_subject1_area_pial_lh_native(script_runner):
     ret = script_runner.run('brainviewer', 'subject1' , '-d', TEST_DATA_DIR, '-m',  'area', '-s', 'pial', '--hemi', 'lh', '-v')
     assert ret.success
     assert 'Verbosity' in ret.stdout
     assert 'Loading data for subject' in ret.stdout
     assert 'measure area of surface pial for hemisphere lh' in ret.stdout
+    assert ret.stderr == ''
+
+
+def test_brainviewer_subject1_area_pial_rh_native(script_runner):
+    ret = script_runner.run('brainviewer', 'subject1' , '-d', TEST_DATA_DIR, '-m',  'area', '-s', 'pial', '--hemi', 'rh', '-v')
+    assert ret.success
+    assert 'Verbosity' in ret.stdout
+    assert 'Loading data for subject' in ret.stdout
+    assert 'measure area of surface pial for hemisphere rh' in ret.stdout
+    assert ret.stderr == ''
+
+
+def test_brainviewer_nonverbose_subject1_area_white_both_native(script_runner):
+    ret = script_runner.run('brainviewer', 'subject1' , '-d', TEST_DATA_DIR, '-m',  'area', '-s', 'pial', '--hemi', 'lh')
+    assert ret.success
+    assert not 'Verbosity' in ret.stdout
+    assert not 'Loading data for subject' in ret.stdout
+    assert not 'measure area of surface pial for hemisphere lh' in ret.stdout
+    assert ret.stderr == ''
+
+
+def test_brainviewer_common_fsaverage_subject1_area_white_both_native(script_runner):
+    expected_fsaverage_surf_dir = os.path.join(TEST_DATA_DIR, 'fsaverage', 'surf')
+    if not os.path.isdir(expected_fsaverage_surf_dir):
+        pytest.skip("Test data missing: e.g., directory '%s' does not exist. You can get all test data by running './develop/get_test_data_all.bash' in the repo root." % expected_fsaverage_surf_dir)
+    ret = script_runner.run('brainviewer', 'subject1' , '-d', TEST_DATA_DIR, '-c', '-f', '10', '-m',  'area', '-v')
+    assert ret.success
+    assert 'Verbosity' in ret.stdout
+    assert 'Loading data mapped to common subject fsaverage for subject subject1 from subjects dir' in ret.stdout
+    assert 'measure area of surface white for hemisphere both' in ret.stdout
+    assert ret.stderr == ''
+
+
+def test_brainviewer_nonverbose_common_fsaverage_subject1_area_white_both_native(script_runner):
+    expected_fsaverage_surf_dir = os.path.join(TEST_DATA_DIR, 'fsaverage', 'surf')
+    if not os.path.isdir(expected_fsaverage_surf_dir):
+        pytest.skip("Test data missing: e.g., directory '%s' does not exist. You can get all test data by running './develop/get_test_data_all.bash' in the repo root." % expected_fsaverage_surf_dir)
+    ret = script_runner.run('brainviewer', 'subject1' , '-d', TEST_DATA_DIR, '-c', '-f', '10', '-m',  'area')
+    assert ret.success
+    assert not 'Verbosity' in ret.stdout
+    assert not 'Loading data mapped to common subject fsaverage for subject subject1 from subjects dir' in ret.stdout
+    assert not 'measure area of surface white for hemisphere both' in ret.stdout
     assert ret.stderr == ''
