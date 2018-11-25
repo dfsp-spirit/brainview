@@ -31,6 +31,12 @@ def test_get_config():
     assert cfg.has_section('figure') == True
 
 
+def test_get_default_config():
+    cfg = ut.get_default_config()
+    assert cfg.has_section('figure') == True
+    assert cfg.has_section('mesh') == True
+
+
 def test_get_config_from_file():
     cfg_file = os.path.join(TEST_DATA_DIR, 'brainviewrc')
     cfg = ut.get_config_from_file(cfg_file)
@@ -51,14 +57,24 @@ def test_cfg_get_default_value_works_for_all_types():
     cfg = ut.get_config_from_file(cfg_file)
     # retreive some non-existant values are check that the supplied default values are returned
     assert ut.cfg_get('no_such_section', 'option_a', 'some_default', config=cfg) == 'some_default'
-    assert ut.cfg_get('no_such_section', 'option_b', 5, config=cfg) == 5
-    assert ut.cfg_get('no_such_section', 'option_c', 0.53, config=cfg) == pytest.approx(0.53, 0.0001)
-    assert ut.cfg_get('no_such_section', 'option_d', False, config=cfg) == False
+    assert ut.cfg_getint('no_such_section', 'option_b', 5, config=cfg) == 5
+    assert ut.cfg_getfloat('no_such_section', 'option_c', 0.53, config=cfg) == pytest.approx(0.53, 0.0001)
+    assert ut.cfg_getboolean('no_such_section', 'option_d', False, config=cfg) == False
     # also test without a config, this will load the default config
     assert ut.cfg_get('no_such_section', 'option_a', 'some_default') == 'some_default'
-    assert ut.cfg_get('no_such_section', 'option_b', 5) == 5
-    assert ut.cfg_get('no_such_section', 'option_c', 0.53) == pytest.approx(0.53, 0.0001)
-    assert ut.cfg_get('no_such_section', 'option_d', False) == False
+    assert ut.cfg_getint('no_such_section', 'option_b', 5) == 5
+    assert ut.cfg_getfloat('no_such_section', 'option_c', 0.53) == pytest.approx(0.53, 0.0001)
+    assert ut.cfg_getboolean('no_such_section', 'option_d', False) == False
+
+
+def test_cfg_get_cfg_value_works_for_all_types():
+    cfg_file = os.path.join(TEST_DATA_DIR, 'brainviewrc')
+    cfg = ut.get_config_from_file(cfg_file)
+    # retreive some values which exist in the file and check that the values from the config are returned (and the supplied default values ignored)
+    assert ut.cfg_get('test', 'option_string', 'bye', config=cfg) == 'hello'
+    assert ut.cfg_getint('test', 'option_int', 3, config=cfg) == 5
+    assert ut.cfg_getfloat('test', 'option_float', 0.22, config=cfg) == pytest.approx(0.53, 0.0001)
+    assert ut.cfg_getboolean('test', 'option_boolean', True, config=cfg) == False
 
 
 def test_cfg_get_any_raises_on_invalid_return_type():

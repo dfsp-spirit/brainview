@@ -3,3 +3,8 @@ width=900
 height=400
 [mesh]
 representation=surface
+[test]
+option_int=5
+option_string=hello
+option_boolean=False
+option_float=0.53
