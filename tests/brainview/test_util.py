@@ -23,7 +23,7 @@ TEST_DATA_DIR = os.getenv('BRAINVIEW_TEST_DATA_DIR', TEST_DATA_DIR)
 
 def test_get_default_config_filename():
     cfg_file = bv.get_default_config_filename()
-    assert '.brainloadrc' in cfg_file
+    assert '.brainviewrc' in cfg_file
 
 
 def test_get_config():

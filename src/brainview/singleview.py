@@ -78,42 +78,6 @@ def brain_label_view(fig, vert_coords, faces, verts_in_label):
     return brain_morphometry_view(fig, vert_coords, faces, label_map)
 
 
-def _brain_atlas_view_simple(fig, vert_coords, faces, vertex_labels, label_names):
-    """
-    View the vertices which are part of an annotation, usually a brain atlas.
-
-    View the vertices which are part of an annotation, usually a brain atlas. An atlas consists of several sets of vertices, each of which is assigned a color and a label. This simple version just assigns random colors to each set, ignoring the given color list.
-
-    Parameters
-    ----------
-    fig: figure handle
-        The figure the surface should be added to
-
-    vert_coords: 2D numpy array of shape (n_verts, 3)
-        An array of vertex corrdinates. Each vertex position is identified by an x, y, and z coordinate.
-
-    faces: 2D numpy array of shape (n_faces, 3)
-        An array of 3-faces, i.e., each face has to consists of 3 vertices. The 3 vertices are indices into the vert_coords array.
-
-    vertex_labels: ndarray, shape (n_vertices,)
-        An array containing the index (for each vertex) into the label_colors and label_names datastructures to retrieve the color and name. If some vertex has no annotation, -1 must be set for it.False.)
-
-    label_names: list of strings
-       The names of the labels. The length of the list is n_labels.
-
-    Returns
-    -------
-    surface: mayavi.modules.surface.Surface
-        The resulting surface. It gets added to the current scene by default and potentially triggers actions in there (like camera re-orientation), use kwargs to change that behaviour.
-    """
-    num_verts = vert_coords.shape[0]
-    num_labels = len(label_names)
-    # create fake morphometry data from the label: set all values for vertices in the label to 1.0, the rest to 0.0
-    label_map = np.zeros((num_verts), dtype=float)
-    for idx, value in enumerate(label_names):
-        label_map[vertex_labels == idx] = (idx + 1.0)
-    return brain_morphometry_view(fig, vert_coords, faces, label_map)
-
 
 def brain_atlas_view(fig, vert_coords, faces, vertex_labels, label_colors, label_names):
     """

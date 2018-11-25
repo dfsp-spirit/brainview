@@ -55,12 +55,24 @@ def get_default_config_filename():
     >>> print bv.get_default_config_filename()
     /home/me/.brainloadrc
     """
-    return os.path.join(os.getenv('HOME', ''), '.brainloadrc')
+    return os.path.join(os.getenv('HOME', ''), '.brainviewrc')
 
 
 def get_config_from_file(ini_file):
     """
-    Returns a config parsed from an INI file. Currently, the file has to supply all required settings.
+    Return the config parsed from the INI file.
+
+    Return the config parsed from an INI file. Currently, the file has to supply all required settings.
+
+    Parameters
+    ----------
+    ini_file: string
+        Path to a configuration file in INI format.
+
+    Returns
+    -------
+    configparser
+        The configuration parsed from the ini_file.
     """
     if not os.path.isfile(ini_file):
         raise ValueError("Config file '%s' does not exist. Must be a readable file in INI format." % ini_file)
@@ -71,10 +83,177 @@ def get_config_from_file(ini_file):
 
 def get_default_config():
     """
-    Returns the default config.
+    Return the default configuration.
+
+    Return the default configuration that is stored internally (in the source code). Does not require access to the file system.
+
+    Returns
+    -------
+    configparser
+        The default configuration.
     """
     config = configparser.ConfigParser()
     config.add_section('figure')
     config.set('figure', 'width', '800')
     config.set('figure', 'height', '600')
+    config.add_section('mesh')
+    config.set('mesh', 'representation', 'surface') # see https://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html#triangular-mesh
     return config
+
+
+def cfg_get(section, option, default_value, config=None):
+    """
+    Retrieve a string value from the configuration or use the default.
+
+    Retrieve a string value from the configuration. If the config does not contain the value, use the default_value passed on a parameter instead.
+
+    Parameters
+    ----------
+    section: string
+        The section in the config that contains the requested option.
+
+    option: string
+        The requested option name. Its value in the configuration will be returned (if available).
+
+    default_value: string
+        The value to return if the configuration does not contain the requested data.
+
+    config: configparser, optional.
+        If given, the config is searched for the value. If omitted, this function will get the config itself, which may include loading it from disk. If you have already loaded the configuration, it is faster to pass it to prevent a useless reload.
+
+    Returns
+    -------
+    string
+        The option value. If the configuration contained the option in the requested section, the value is from the configuration. Otherwise, the parameter default_value is used.
+    """
+    return _cfg_get_any(section, option, default_value, 'string', config=config)
+
+
+def cfg_getint(section, option, default_value, config=None):
+    """
+    Retrieve an int value from the configuration or use the default.
+
+    Retrieve an int value from the configuration. If the config does not contain the value, use the default_value passed on a parameter instead.
+
+    Parameters
+    ----------
+    section: string
+        The section in the config that contains the requested option.
+
+    option: string
+        The requested option name. Its value in the configuration will be returned (if available).
+
+    default_value: string
+        The value to return if the configuration does not contain the requested data.
+
+    config: configparser, optional.
+        If given, the config is searched for the value. If omitted, this function will get the config itself, which may include loading it from disk. If you have already loaded the configuration, it is faster to pass it to prevent a useless reload.
+
+    Returns
+    -------
+    int
+        The option value. If the configuration contained the option in the requested section, the value is from the configuration. Otherwise, the parameter default_value is used.
+    """
+    return _cfg_get_any(section, option, default_value, 'int', config=config)
+
+
+def cfg_getfloat(section, option, default_value, config=None):
+    """
+    Retrieve a float value from the configuration or use the default.
+
+    Retrieve a float value from the configuration. If the config does not contain the value, use the default_value passed on a parameter instead.
+
+    Parameters
+    ----------
+    section: string
+        The section in the config that contains the requested option.
+
+    option: string
+        The requested option name. Its value in the configuration will be returned (if available).
+
+    default_value: string
+        The value to return if the configuration does not contain the requested data.
+
+    config: configparser, optional.
+        If given, the config is searched for the value. If omitted, this function will get the config itself, which may include loading it from disk. If you have already loaded the configuration, it is faster to pass it to prevent a useless reload.
+
+    Returns
+    -------
+    float
+        The option value. If the configuration contained the option in the requested section, the value is from the configuration. Otherwise, the parameter default_value is used.
+    """
+    return _cfg_get_any(section, option, default_value, 'float', config=config)
+
+
+def cfg_getboolean(section, option, default_value, config=None):
+    """
+    Retrieve a Boolean value from the configuration or use the default.
+
+    Retrieve a Boolean value from the configuration. If the config does not contain the value, use the default_value passed on a parameter instead.
+
+    Parameters
+    ----------
+    section: string
+        The section in the config that contains the requested option.
+
+    option: string
+        The requested option name. Its value in the configuration will be returned (if available).
+
+    default_value: string
+        The value to return if the configuration does not contain the requested data.
+
+    config: configparser, optional.
+        If given, the config is searched for the value. If omitted, this function will get the config itself, which may include loading it from disk. If you have already loaded the configuration, it is faster to pass it to prevent a useless reload.
+
+    Returns
+    -------
+    boolean
+        The option value. If the configuration contained the option in the requested section, the value is from the configuration. Otherwise, the parameter default_value is used.
+    """
+    return _cfg_get_any(section, option, default_value, 'boolean', config=config)
+
+
+
+def _cfg_get_any(section, option, default_value, return_type, config=None):
+    """
+    Retrieve a value from the configuration or use the default.
+
+    Retrieve a value from the configuration. If the config does not contain the value, use the default_value passed on a parameter instead.
+
+    Parameters
+    ----------
+    section: string
+        The section in the config that contains the requested option.
+
+    option: string
+        The requested option name. Its value in the configuration will be returned (if available).
+
+    default_value: string
+        The value to return if the configuration does not contain the requested data.
+
+    return_type: one of ('string', 'int', 'float', 'boolean')
+
+    config: configparser, optional.
+        If given, the config is searched for the value. If omitted, this function will get the config itself, which may include loading it from disk. If you have already loaded the configuration, it is faster to pass it to prevent a useless reload.
+
+    Returns
+    -------
+    option, type depends on return_type parameter
+        The option value. If the configuration contained the option in the requested section, the value is from the configuration. Otherwise, the parameter default_value is used.
+    """
+    if return_type not in ('int', 'float', 'string', 'boolean'):
+        raise ValueError("ERROR: return_type must be one of {'int', 'float', 'string', 'boolean'} but is '%s'." % return_type)
+
+    if config is None:
+        config = get_config()
+    if config.has_option(section, option):
+        if return_type == 'int':
+            return config.getint(section, option)
+        else if return_type == 'float':
+            return config.getfloat(section, option)
+        else if return_type == 'boolean':
+            return config.getboolean(section, option)
+        else:
+            return config.get(section, option)
+    else:
+        return default_value
