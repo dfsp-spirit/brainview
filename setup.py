@@ -11,7 +11,7 @@ setup(
     version='0.0.1',
     description='Visualize morphometry neuroimaging data on 3D brain meshes.',
     long_description='Provides a high-level interface for visualizing arbitrary data on brain meshes in 3D by wrapping around matplotlib and mayavi.',
-    keywords='neuroimaging freesurfer visualize plot 3D brain morphometry',
+    keywords='neuroimaging freesurfer visualize plot 3D brain morphometry MRI',
     author='Tim Schäfer',
     url='https://github.com/dfsp-spirit/brainview',
     packages=find_packages(where='src'),
