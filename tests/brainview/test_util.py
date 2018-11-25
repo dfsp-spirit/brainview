@@ -44,3 +44,25 @@ def test_get_config_from_file_raises_on_missing_file():
     with pytest.raises(ValueError) as exc_info:
         cfg = ut.get_config_from_file(missing_cfg_file)
     assert 'not_there' in str(exc_info.value)
+
+
+def test_cfg_get_default_value_works_for_all_types():
+    cfg_file = os.path.join(TEST_DATA_DIR, 'brainviewrc')
+    cfg = ut.get_config_from_file(cfg_file)
+    # retreive some non-existant values are check that the supplied default values are returned
+    assert ut.cfg_get('no_such_section', 'option_a', 'some_default', config=cfg) == 'some_default'
+    assert ut.cfg_get('no_such_section', 'option_b', 5, config=cfg) == 5
+    assert ut.cfg_get('no_such_section', 'option_c', 0.53, config=cfg) == pytest.approx(0.53, 0.0001)
+    assert ut.cfg_get('no_such_section', 'option_d', False, config=cfg) == False
+    # also test without a config, this will load the default config
+    assert ut.cfg_get('no_such_section', 'option_a', 'some_default') == 'some_default'
+    assert ut.cfg_get('no_such_section', 'option_b', 5) == 5
+    assert ut.cfg_get('no_such_section', 'option_c', 0.53) == pytest.approx(0.53, 0.0001)
+    assert ut.cfg_get('no_such_section', 'option_d', False) == False
+
+
+def test_cfg_get_any_raises_on_invalid_return_type():
+    with pytest.raises(ValueError) as exc_info:
+        whatever = ut._cfg_get_any('section_a', 'option_b', 5, 'invalid_return_type')
+    assert 'ERROR: return_type must be one of' in str(exc_info.value)
+    assert 'invalid_return_type' in str(exc_info.value)

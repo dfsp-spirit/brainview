@@ -249,9 +249,9 @@ def _cfg_get_any(section, option, default_value, return_type, config=None):
     if config.has_option(section, option):
         if return_type == 'int':
             return config.getint(section, option)
-        else if return_type == 'float':
+        elif return_type == 'float':
             return config.getfloat(section, option)
-        else if return_type == 'boolean':
+        elif return_type == 'boolean':
             return config.getboolean(section, option)
         else:
             return config.get(section, option)
