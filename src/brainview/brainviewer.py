@@ -77,8 +77,8 @@ def brainviewer():
 
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
     cfg = bv.get_config()
-    fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(cfg.getint('figure', 'width'), cfg.getint('figure', 'height')))
-    mesh_args = {'representation': cfg.get('mesh', 'representation')}
+    fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(bv.cfg_getint('figure', 'width', 800), bv.cfg_getint('figure', 'height', 600)))
+    mesh_args = {'representation': bv.cfg_get('mesh', 'representation', 'surface')}
     brain_mesh = bv.brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **mesh_args)
     print("Saving brain view to file '%s'..." % (args.outputfile))
     mlab.savefig(args.outputfile)

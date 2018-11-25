@@ -82,3 +82,17 @@ def test_cfg_get_any_raises_on_invalid_return_type():
         whatever = ut._cfg_get_any('section_a', 'option_b', 5, 'invalid_return_type')
     assert 'ERROR: return_type must be one of' in str(exc_info.value)
     assert 'invalid_return_type' in str(exc_info.value)
+
+
+def test_merge_two_dictionaries():
+    merged = ut.merge_two_dictionaries({'hi': 'there', 'number1': 1}, {'number1': 2, 'number2': 2})
+    assert merged['hi'] == 'there'
+    assert merged['number1'] == 2
+    assert merged['number2'] == 2
+
+
+def test_cfg_get_optional_values():
+    cfg_file = os.path.join(TEST_DATA_DIR, 'brainviewrc')
+    cfg = ut.get_config_from_file(cfg_file)
+    option_dict = ut.cfg_get_optional_values('figure', {'width': 'int', 'not_there': 'int'}, config=cfg)
+    assert len(option_dict) == 1

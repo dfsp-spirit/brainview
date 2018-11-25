@@ -257,3 +257,42 @@ def _cfg_get_any(section, option, default_value, return_type, config=None):
             return config.get(section, option)
     else:
         return default_value
+
+
+def merge_two_dictionaries(dict1, dict2):
+    """
+    Merge two dictionaries.
+
+    Merge two dictionaries, return the result. Does not alter the input dictionaries. Note that the order matters if the input dictionaries contain identical keys: the values from the second one will show up in the merged result.
+
+    Parameters
+    ----------
+    dict1: dictionary
+        The first dictionary.
+
+    dict2: dictionary
+        The second dictionary. Note that the order matters if the input dictionaries contain identical keys: the values from the second one will show up in the merged result.
+
+    Returns
+    -------
+    dictionary
+        The merged, new dictionary.
+    """
+    new_dict = dict1.copy()
+    new_dict.update(dict2)
+    return new_dict
+
+
+def cfg_get_optional_values(section, option_dict, config=None):
+    """
+    Retrieve several configuration values ONLY if they are actually defined.
+
+    Retrieve a dictionary of several configuration values ONLY if they are actually defined in the configuration.
+    """
+    result_dict= {}
+    if config is None:
+        config = get_config()
+    for option, option_type in option_dict.items():
+        if config.has_option(section, option):
+            result_dict[option] = _cfg_get_any(section, option, None, option_type, config=config)
+    return result_dict
