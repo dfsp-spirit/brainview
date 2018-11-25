@@ -6,7 +6,11 @@ import brainload as bl
 import brainview as bv
 import brainview.util as ut
 import mayavi
-import ConfigParser
+
+try:
+    import configparser # Python 3
+except:
+    import ConfigParser as configparser     # Python 2
 
 mlab.options.offscreen = True
 

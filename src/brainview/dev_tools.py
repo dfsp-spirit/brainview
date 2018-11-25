@@ -1,7 +1,7 @@
 """
 Brainview development functions for debugging.
 """
-
+from __future__ import print_function
 import numpy as np
 import brainload as bl
 import brainload.spatial as st
@@ -15,12 +15,12 @@ def _print_mlab_view():
     See http://docs.enthought.com/mayavi/mayavi/auto/mlab_camera.html#view for details.
     """
     view = mlab.view()
-    print "[View] azimuth=%f, elevation=%f, distance=%f" % (view[0], view[1], view[2])
+    print("[View] azimuth=%f, elevation=%f, distance=%f" % (view[0], view[1], view[2]))
 
 
 def _print_data_description(vert_coords, faces, morphometry_data, print_tag="[data]"):
-    print "%s #verts=%d #faces=%d" % (print_tag, vert_coords.shape[0], faces.shape[0])
-    print "%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data))
+    print("%s #verts=%d #faces=%d" % (print_tag, vert_coords.shape[0], faces.shape[0]))
+    print("%s morphometry_data: length=%d min=%f max=%f" % (print_tag, len(morphometry_data), np.min(morphometry_data), np.max(morphometry_data)))
 
 
 def _activate_overlay(meta_data):

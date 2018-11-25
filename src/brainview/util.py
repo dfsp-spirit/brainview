@@ -3,7 +3,10 @@ Utility functions for Brainview.
 """
 
 import os
-from ConfigParser import SafeConfigParser
+try:
+    import configparser # Python 3
+except:
+    import ConfigParser as configparser     # Python 2
 
 def get_config():
     """
@@ -61,7 +64,7 @@ def get_config_from_file(ini_file):
     """
     if not os.path.isfile(ini_file):
         raise ValueError("Config file '%s' does not exist. Must be a readable file in INI format." % ini_file)
-    config = SafeConfigParser()
+    config = configparser.ConfigParser()
     config.read(ini_file)
     return config
 
@@ -70,7 +73,7 @@ def get_default_config():
     """
     Returns the default config.
     """
-    config = SafeConfigParser()
+    config = configparser.ConfigParser()
     config.add_section('figure')
     config.set('figure', 'width', '800')
     config.set('figure', 'height', '600')

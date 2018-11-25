@@ -3,11 +3,12 @@ Functions to display morphometry data, labels and annotations in 3D on brain sur
 
 These functions provide a single view, i.e., the scene is visible from a single camera perspective.
 """
-
+from __future__ import print_function
 import numpy as np
 import brainload as bl
 import brainload.spatial as st
 import mayavi.mlab as mlab
+
 
 
 
@@ -252,7 +253,7 @@ def export_figure(fig_handle, export_file_name_with_extension, silent=False, **k
     >>> bv.export_figure('brain.png', figure=fig)
     """
     if not silent:
-        print "Exporting scene to file '%s'." % export_file_name_with_extension
+        print("Exporting scene to file '%s'." % export_file_name_with_extension)
     mlab.savefig(export_image_file, figure=fig_handle, **kwargs)
 
 

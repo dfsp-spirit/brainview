@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import os
 import sys
 import numpy as np
@@ -72,17 +73,17 @@ def brainviewer():
         if hemi == "rh" or hemi == "both":
             print("Loaded rh surface from file '%s'." % meta_data["rh.surf_file"])
             print("Loaded rh morphometry data from file '%s'." % meta_data["rh.morphometry_file"])
-        print "Loaded mesh consisting of %d vertices and %d faces. Loaded morphometry data for %d vertices." % (vert_coords.shape[0], faces.shape[0], morphometry_data.shape[0])
+        print("Loaded mesh consisting of %d vertices and %d faces. Loaded morphometry data for %d vertices." % (vert_coords.shape[0], faces.shape[0], morphometry_data.shape[0]))
 
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
     cfg = bv.get_config()
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(cfg.getint('figure', 'width'), cfg.getint('figure', 'height')))
     brain_mesh = bv.brain_morphometry_view(fig, vert_coords, faces, morphometry_data)
-    print "Saving brain view to file '%s'..." % (args.outputfile)
+    print("Saving brain view to file '%s'..." % (args.outputfile))
     mlab.savefig(args.outputfile)
     if interactive:
         if verbose:
-            print "Interactive mode set, displaying brain plot in interactive window."
+            print("Interactive mode set, displaying brain plot in interactive window.")
         bv.show()
 
     sys.exit(0)

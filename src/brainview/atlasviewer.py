@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import os
 import sys
 import numpy as np
@@ -76,11 +77,11 @@ def atlasviewer():
         brain_mesh = bv.brain_label_view(fig, vert_coords, faces, verts_in_label)
 
 
-    print "Saving brain view to file '%s'..." % (outputfile)
+    print("Saving brain view to file '%s'..." % (outputfile))
     mlab.savefig(outputfile)
     if interactive:
         if verbose:
-            print "Interactive mode set, displaying brain plot in interactive window."
+            print("Interactive mode set, displaying brain plot in interactive window.")
         bv.show()
 
     sys.exit(0)
