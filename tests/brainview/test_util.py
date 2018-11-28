@@ -70,7 +70,7 @@ def test_cfg_get_default_value_works_for_all_types():
 def test_cfg_get_cfg_value_works_for_all_types():
     cfg_file = os.path.join(TEST_DATA_DIR, 'brainviewrc')
     cfg = ut.get_config_from_file(cfg_file)
-    # retreive some values which exist in the file and check that the values from the config are returned (and the supplied default values ignored)
+    # retrieve some values which exist in the file and check that the values from the config are returned (and the supplied default values ignored)
     assert ut.cfg_get('test', 'option_string', 'bye', config=cfg) == 'hello'
     assert ut.cfg_getint('test', 'option_int', 3, config=cfg) == 5
     assert ut.cfg_getfloat('test', 'option_float', 0.22, config=cfg) == pytest.approx(0.53, 0.0001)
@@ -85,10 +85,19 @@ def test_cfg_get_any_raises_on_invalid_return_type():
 
 
 def test_merge_two_dictionaries():
-    merged = ut.merge_two_dictionaries({'hi': 'there', 'number1': 1}, {'number1': 2, 'number2': 2})
+    dict1 = {'hi': 'there', 'number1': 1}
+    dict2 = {'number1': 2, 'number2': 2}
+    merged = ut.merge_two_dictionaries(dict1, dict2)
     assert merged['hi'] == 'there'
     assert merged['number1'] == 2
     assert merged['number2'] == 2
+    # Ensure that the original dictionaries were not changed
+    assert dict1['number1'] == 1
+    assert dict1['hi'] == 'there'
+    assert len(dict1) == 2
+    assert dict2['number1'] == 2
+    assert dict2['number2'] == 2
+    assert len(dict2) == 2
 
 
 def test_cfg_get_optional_values():
@@ -96,3 +105,4 @@ def test_cfg_get_optional_values():
     cfg = ut.get_config_from_file(cfg_file)
     option_dict = ut.cfg_get_optional_values('figure', {'width': 'int', 'not_there': 'int'}, config=cfg)
     assert len(option_dict) == 1
+    assert option_dict['width'] == 900
