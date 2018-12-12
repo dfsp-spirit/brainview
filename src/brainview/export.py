@@ -46,7 +46,7 @@ def _get_vertex_colors(morphometry_data, colormap_name, colormap_adjust_alpha_to
     else:
         vertex_colors = me.scalars_to_colors_matplotlib(morphometry_data, colormap_name)
         if colormap_adjust_alpha_to >= 0:
-            vertex_colors[:,4] = colormap_adjust_alpha_to
+            vertex_colors[:,3] = colormap_adjust_alpha_to
         return vertex_colors
 
 
