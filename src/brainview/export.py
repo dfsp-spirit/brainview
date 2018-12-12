@@ -73,6 +73,6 @@ def _mesh_export_format_from_filename(filename):
     if filename.endswith('.ply'):
         return 'ply', True
     elif filename.endswith('.obj'):
-        return 'ply', True
+        return 'obj', True
     else:
         return 'obj', False
