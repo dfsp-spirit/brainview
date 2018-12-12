@@ -24,7 +24,7 @@ def _get_export_string(export_format, vertex_coords, faces, morphometry_data, co
         raise ValueError("ERROR: export_format must be one of {'obj', 'ply'} but is '%s'." % export_format)
 
     if export_format == 'obj':
-        return = bl.mesh_to_obj(vertex_coords, faces)
+        return bl.mesh_to_obj(vertex_coords, faces)
     else:
         vertex_colors = _get_vertex_colors(morphometry_data, colormap_name, colormap_adjust_alpha_to)
         return bl.mesh_to_ply(vertex_coords, faces, vertex_colors=vertex_colors)
