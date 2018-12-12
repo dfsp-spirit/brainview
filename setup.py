@@ -29,7 +29,7 @@ setup(
     license='MIT',
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pytest-cov', 'pytest-console-scripts'],
-    install_requires=['numpy', 'nibabel', 'matplotlib', 'mayavi', 'vtk', 'brainload'],
+    install_requires=['numpy', 'nibabel', 'matplotlib', 'mayavi', 'vtk', 'brainload>=0.3.2'],
     package_dir = {'': 'src'},                               # The root directory that contains the source for the modules (relative to setup.py) is ./src/
     zip_safe=False,
     entry_points={
