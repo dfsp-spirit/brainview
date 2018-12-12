@@ -31,6 +31,7 @@ def brainviewer():
     parser.add_argument("-i", "--interactive", help="Display brain plot in an interactive window.", action="store_true")
     parser.add_argument("-o", "--outputfile", help="Output image file name. String, defaults to 'brain_morphometry.png'.", default="brain_morphometry.png")
     parser.add_argument("-v", "--verbose", help="Increase output verbosity.", action="store_true")
+    parser.add_argument("-x", "--mesh-export", help="Mesh export output filename. The file extension should be '.obj' or '.ply' to indicate the output format, otherwise obj is used. Optional, if not given at all, then no mesh will be exported.", default="")
     args = parser.parse_args()
 
     verbose = False
@@ -77,10 +78,17 @@ def brainviewer():
 
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
     cfg = bv.get_config()
+
+    if args.mesh_export != "":
+        colormap_name = bv.cfg_get('meshexport', 'colormap', 'viridis')
+        colormap_adjust_alpha_to = bv.cfg_getint('meshexport', 'colormap_adjust_alpha_to', -1)
+        print("Exporting brain mesh to file '%s'..." % args.mesh_export)
+        export_mesh_to_file(args.mesh_export, vertex_coords, faces, morphometry_data=morphometry_data, colormap_name=colormap_name, colormap_adjust_alpha_to=colormap_adjust_alpha_to)
+
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(bv.cfg_getint('figure', 'width', 800), bv.cfg_getint('figure', 'height', 600)))
-    mesh_args = {'representation': bv.cfg_get('mesh', 'representation', 'surface')}
+    mesh_args = {'representation': bv.cfg_get('mesh', 'representation', 'surface'), 'colormap': bv.cfg_get('mesh', 'colormap', 'cool')}
     brain_mesh = bv.brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **mesh_args)
-    print("Saving brain view to file '%s'..." % (args.outputfile))
+    print("Saving brain view to image file '%s'..." % (args.outputfile))
     mlab.savefig(args.outputfile)
     if interactive:
         if verbose:
