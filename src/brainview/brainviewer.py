@@ -83,7 +83,7 @@ def brainviewer():
         colormap_name = bv.cfg_get('meshexport', 'colormap', 'viridis')
         colormap_adjust_alpha_to = bv.cfg_getint('meshexport', 'colormap_adjust_alpha_to', -1)
         print("Exporting brain mesh to file '%s'..." % args.mesh_export)
-        export_mesh_to_file(args.mesh_export, vertex_coords, faces, morphometry_data=morphometry_data, colormap_name=colormap_name, colormap_adjust_alpha_to=colormap_adjust_alpha_to)
+        bv.export_mesh_to_file(args.mesh_export, vert_coords, faces, morphometry_data=morphometry_data, colormap_name=colormap_name, colormap_adjust_alpha_to=colormap_adjust_alpha_to)
 
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(bv.cfg_getint('figure', 'width', 800), bv.cfg_getint('figure', 'height', 600)))
     mesh_args = {'representation': bv.cfg_get('mesh', 'representation', 'surface'), 'colormap': bv.cfg_get('mesh', 'colormap', 'cool')}

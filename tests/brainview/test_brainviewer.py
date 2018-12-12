@@ -4,6 +4,8 @@
 
 import os
 import pytest
+import tempfile
+import shutil
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 TEST_DATA_DIR = os.path.join(THIS_DIR, os.pardir, 'test_data')
@@ -74,3 +76,18 @@ def test_brainviewer_nonverbose_common_fsaverage_subject1_area_white_both_native
     assert not 'Loading data mapped to common subject fsaverage for subject subject1 from subjects dir' in ret.stdout
     assert not 'measure area of surface white for hemisphere both' in ret.stdout
     assert ret.stderr == ''
+
+
+def test_brainviewer_export_mesh(script_runner):
+    expected_fsaverage_surf_dir = os.path.join(TEST_DATA_DIR, 'fsaverage', 'surf')
+    if not os.path.isdir(expected_fsaverage_surf_dir):
+        pytest.skip("Test data missing: e.g., directory '%s' does not exist. You can get all test data by running './develop/get_test_data_all.bash' in the repo root." % expected_fsaverage_surf_dir)
+    tmp_dir = os.path.join(tempfile.gettempdir(), '.{}'.format(hash(os.times())))
+    os.makedirs(tmp_dir)
+    export_file = os.path.join(tmp_dir, 'blah.obj')
+    ret = script_runner.run('brainviewer', 'subject1' , '-d', TEST_DATA_DIR, '-c', '-f', '10', '-m',  'area', '-v', '-x', export_file)
+    assert ret.success
+    assert 'Verbosity' in ret.stdout
+    assert 'Exporting brain mesh to file' in ret.stdout
+    assert ret.stderr == ''
+    shutil.rmtree(tmp_dir, ignore_errors=True)
