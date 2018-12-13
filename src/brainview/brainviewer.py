@@ -34,10 +34,15 @@ def brainviewer():
     parser.add_argument("-x", "--mesh-export", help="Mesh export output filename. The file extension should be '.obj' or '.ply' to indicate the output format, otherwise obj is used. Optional, if not given at all, then no mesh will be exported.", default="")
     args = parser.parse_args()
 
+    cfg, cfg_file = bv.get_config()
     verbose = False
     if args.verbose:
         verbose = True
         print("Verbosity turned on.")
+        if cfg_file is None:
+            print("Using internal default configuration. No config file found at '%s'." % bv.get_default_config_filename())
+        else:
+            print("Using configuration from file: '%s'" % cfg_file)
 
     if args.subjects_dir == "":
         subjects_dir = os.getenv('SUBJECTS_DIR')
@@ -58,11 +63,11 @@ def brainviewer():
         fwhm = args.fwhm
         average_subject = args.average_subject
         if verbose:
-            print("Loading data mapped to common subject %s for subject %s from subjects dir %s: measure %s of surface %s for hemisphere %s at fwhm %s." % (average_subject, subject_id, subjects_dir, measure, surface, hemi, fwhm))
+            print("Loading data mapped to common subject %s for subject %s from subjects dir '%s': measure %s of surface %s for hemisphere %s at fwhm %s." % (average_subject, subject_id, subjects_dir, measure, surface, hemi, fwhm))
         vert_coords, faces, morphometry_data, meta_data = bl.subject_avg(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi, fwhm=fwhm, average_subject=average_subject)
     else:
         if verbose:
-            print("Loading data for subject %s from subjects dir %s: measure %s of surface %s for hemisphere %s." % (subject_id, subjects_dir, measure, surface, hemi))
+            print("Loading data for subject %s from subjects dir '%s': measure %s of surface %s for hemisphere %s." % (subject_id, subjects_dir, measure, surface, hemi))
         vert_coords, faces, morphometry_data, meta_data = bl.subject(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi)
 
     morphometry_data = morphometry_data.astype(float)
@@ -77,7 +82,6 @@ def brainviewer():
         print("Loaded mesh consisting of %d vertices and %d faces. Loaded morphometry data for %d vertices." % (vert_coords.shape[0], faces.shape[0], morphometry_data.shape[0]))
 
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
-    cfg = bv.get_config()
 
     if args.mesh_export != "":
         colormap_name = bv.cfg_get('meshexport', 'colormap', 'viridis')
