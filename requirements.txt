@@ -1,7 +1,7 @@
 ## requirements.txt -- Requirements to be installed for automated tests on travis. Users should ignore this file.
 numpy
 nibabel
-brainload>=0.3.1
+brainload>=0.3.2
 matplotlib
 vtk
 mayavi
