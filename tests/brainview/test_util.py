@@ -27,7 +27,7 @@ def test_get_default_config_filename():
 
 
 def test_get_config():
-    cfg = bv.get_config()
+    cfg, cfg_file = bv.get_config()
     assert cfg.has_section('figure') == True
 
 

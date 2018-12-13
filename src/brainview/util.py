@@ -18,26 +18,26 @@ def get_config():
 
     Returns
     -------
-    SafeConfigParser
-        A config parser that contains Brainview configuration information. If the file `~/.brainloadrc` exists, the config gets loaded from that file. The file is expected to be in INI format. Otherwise, internal defaults settings are used. The config contains the following settings:
-            - Section `figure`
-                - width: int, the figure width in pixels. Defaults to 800.
-                - height: int, the figure height in pixels. Defaults to 600.
+    config: SafeConfigParser
+        A config parser that contains Brainview configuration information. If the file `~/.brainloadrc` exists, the config gets loaded from that file. The file is expected to be in INI format. Otherwise, internal defaults settings are used. See get_default_config for available settings.
+
+    config_file_used: string or None
+        The path to the config file that was loaded, or None if the internal config was used.
 
     Examples
     --------
     Print the setting `width` from the section `figure` in the settings:
 
     >>> import brainview as bv
-    >>> cfg = bv.get_config()
+    >>> cfg, config_file_used = bv.get_config()
     >>> print cfg.getint('figure', 'width')
     800
     """
     default_config_file = get_default_config_filename()
     if os.path.isfile(default_config_file):
-        return get_config_from_file(default_config_file)
+        return get_config_from_file(default_config_file), default_config_file
     else:
-        return get_default_config()
+        return get_default_config(), None
 
 
 def get_default_config_filename():
@@ -251,7 +251,7 @@ def _cfg_get_any(section, option, default_value, return_type, config=None):
         raise ValueError("ERROR: return_type must be one of {'int', 'float', 'string', 'boolean'} but is '%s'." % return_type)
 
     if config is None:
-        config = get_config()
+        config, _ = get_config()
     if config.has_option(section, option):
         if return_type == 'int':
             return config.getint(section, option)
