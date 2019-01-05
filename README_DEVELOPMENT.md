@@ -136,3 +136,24 @@ $ pip3 install --index-url https://test.pypi.org/simple/ brainview
 $ python3 -c 'import brainview as bv; print(bv.__version__)'
 0.0.1
 ```
+
+### Building the conda package
+
+Follow the brainload instructions, with the following changes:
+
+#### Updates to section Prepare environment
+
+In section Anaconda, sub section Prepare environment, you have to add another channel:
+
+```console
+conda config --add channels conda-forge
+conda config --add channels dfspspirit
+```
+
+Otherwise you will get an error that the `brainload` dependency cannot be satisfied.
+
+#### Updates to section Anaconda: How the base recipe was created
+
+- When preparing the conda recipe for the first time by manually adding the test dependencies to the yaml file, you will also have to add `pytest-console-scripts` (in addition to `pytest`, `pytest-cov`, and `pytest-runner`) to all mentioned sections.
+- You have to add `bz2file` as a run and host dependency. It seems nibabel needs it but does not list it as a dependency.
+- I removed `pyhton`, `vtk`, `mayavi`, and `matplotlib` from *run* dependencies because conda-build displayed a warning that suggested you should do this. If the recipe is now broken, add them back. (I started building and it succeeded before that change.)
