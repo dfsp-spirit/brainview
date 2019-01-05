@@ -157,3 +157,14 @@ Otherwise you will get an error that the `brainload` dependency cannot be satisf
 - When preparing the conda recipe for the first time by manually adding the test dependencies to the yaml file, you will also have to add `pytest-console-scripts` (in addition to `pytest`, `pytest-cov`, and `pytest-runner`) to all mentioned sections.
 - You have to add `bz2file` as a run and host dependency. It seems nibabel needs it but does not list it as a dependency.
 - I removed `pyhton`, `vtk`, `mayavi`, and `matplotlib` from *run* dependencies because conda-build displayed a warning that suggested you should do this. If the recipe is now broken, add them back. (I started building and it succeeded before that change.)
+
+
+#### Updates to section Build the conda package
+
+The package will be stored in a sub directory that depends on your architecture, as it is not platform-independent. So you will have to do something like this for the conversion:
+
+```console
+export PKG_FILENAME="some_name_and_version_here.tar.bz2"
+export PLATFORM="linux-64"     # or whatever you are building on
+conda convert --platform all /tmp/condaishacky/$PLATFORM/$PKG_FILENAME -o pkg_converted/
+```
