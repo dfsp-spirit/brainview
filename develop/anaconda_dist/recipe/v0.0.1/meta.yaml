@@ -26,6 +26,10 @@ requirements:
     - pip
     - python
     - vtk
+    - pytest
+    - pytest-cov
+    - pytest-runner
+    - pytest-console-scripts
   run:
     - brainload >=0.3.2
     - matplotlib
@@ -34,6 +38,10 @@ requirements:
     - numpy
     - python
     - vtk
+    - pytest
+    - pytest-cov
+    - pytest-runner
+    - pytest-console-scripts
 
 test:
   imports:
@@ -45,6 +53,7 @@ test:
     - pytest
     - pytest-console-scripts
     - pytest-cov
+    - pytest-runner
 
 about:
   home: https://github.com/dfsp-spirit/brainview
