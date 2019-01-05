@@ -30,18 +30,16 @@ requirements:
     - pytest-cov
     - pytest-runner
     - pytest-console-scripts
+    - bz2file
   run:
     - brainload >=0.3.2
-    - matplotlib
-    - mayavi
     - nibabel
     - numpy
-    - python
-    - vtk
     - pytest
     - pytest-cov
     - pytest-runner
     - pytest-console-scripts
+    - bz2file
 
 test:
   imports:
