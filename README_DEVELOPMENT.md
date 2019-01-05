@@ -122,3 +122,17 @@ We will put the documentation online later (maybe on a GitHub page), but that do
 Note that if you added new modules in separate directories, for the documentation to show up,
 you will have to tell autodoc about the paths to the new directories by adding them to `sys.path`
 at the top of the `doc/conf.py` file.
+
+### Building the PIP package
+
+Follow the brainload instructions up to the point where you install into a fresh virtual environment after uploading to PyPI testing. Then, in the new virtual env:
+
+```console
+$ sudo apt install python3-pip python3-venv
+$ python3 -m venv venvp3_bv      # create virtual env in REPO_ROOT
+$ source venvp3_bv/bin/activate
+$ pip3 install nibabel six matplotlib vtk apptools mayavi wheel
+$ pip3 install --index-url https://test.pypi.org/simple/ brainview
+$ python3 -c 'import brainview as bv; print(bv.__version__)'
+0.0.1
+```
