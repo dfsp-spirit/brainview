@@ -1,0 +1,60 @@
+{% set name = "brainview" %}
+{% set version = "0.0.1" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: eebbea1eb6beaa41e5ddda9a46e1a216255b12000d37e4e41f0ca65400515483
+
+build:
+  number: 0
+  entry_points:
+    - brainviewer = brainview.brainviewer:brainviewer
+    - atlasviewer = brainview.atlasviewer:atlasviewer
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv "
+
+requirements:
+  host:
+    - brainload >=0.3.2
+    - matplotlib
+    - mayavi
+    - nibabel
+    - numpy
+    - pip
+    - python
+    - vtk
+  run:
+    - brainload >=0.3.2
+    - matplotlib
+    - mayavi
+    - nibabel
+    - numpy
+    - python
+    - vtk
+
+test:
+  imports:
+    - brainview
+  commands:
+    - brainviewer --help
+    - atlasviewer --help
+  requires:
+    - pytest
+    - pytest-console-scripts
+    - pytest-cov
+
+about:
+  home: https://github.com/dfsp-spirit/brainview
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: Visualize morphometry neuroimaging data on 3D brain meshes.
+  doc_url: http://dfsp-spirit.github.io/brainview
+  dev_url: https://github.com/dfsp-spirit/brainview
+
+extra:
+  recipe-maintainers:
+    - dfsp-spirit
