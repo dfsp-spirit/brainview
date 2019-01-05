@@ -14,7 +14,7 @@ IMPORTANT: Brainload only provides basic visualization functions intended for qu
 
 ## Development stage
 
-This is pre-alpha and not ready for usage yet. Come back another day.
+We now (January 2019) have a first alpha release. Feel free to try it, but it's very early.
 
 
 ## Interface (WIP)
@@ -54,6 +54,35 @@ The smoothed [mean curvature](https://en.wikipedia.org/wiki/Mean_curvature) at e
 Two examples for visualization of annotations based on [cortical parcellations](https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation) using different atlases: the Desikan-Killiany Atlas on the white surface (left), and the Destrieux Atlas on the pial surface (right) of the same subject.
 
 ![Annotations](./img/atlas.png?raw=true "Annotations based on cortical parcellation")
+
+
+## Installation
+
+#### Recommended: via pip
+
+```console
+pip install --user brainview
+```
+
+You can also install into a virtual environment (python2: virtualenv, python3: venv) of course, omit the `--user` part in that case.
+
+[![PyPI version](https://badge.fury.io/py/brainview.svg)](https://badge.fury.io/py/brainview)
+
+Both source and wheel packages are also available here in the [brainview releases](https://github.com/dfsp-spirit/brainview/releases) section at GitHub, but you should not need them.
+
+#### via Anaconda
+
+I started building conda packages for different operating systems, check https://anaconda.org/dfspspirit/brainview to see whether one is available for yours. In case it is:
+
+```console
+conda install -c dfspspirit brainview
+```
+
+[![Anaconda-Server Badge](https://anaconda.org/dfspspirit/brainview/badges/version.svg)](https://anaconda.org/dfspspirit/brainview)
+
+
+If it is not, you can use the recipe in this repo to build it yourself, see [README_DEVELOPMENT](README_DEVELOPMENT.md).
+
 
 
 ## Obtaining suitable pre-processed sMRI input data for brainview
