@@ -22,7 +22,7 @@ def brainviewer():
     parser = argparse.ArgumentParser(description="View brain morphometry data.")
     parser.add_argument("subject", help="The subject you want to load. String, a directory under the subjects_dir.")
     parser.add_argument("-d", "--subjects_dir", help="The subjects_dir containing the subject. Defaults to environment variable SUBJECTS_DIR.", default="")
-    parser.add_argument("-m", "--measure", help="The measure to load. String, defaults to 'area'. ", default="area")
+    parser.add_argument("-m", "--measure", help="The measure to load. String, defaults to None (no morphometry data). Examples: 'area' or 'thickness'.", default=None)
     parser.add_argument("-s", "--surface", help="The surface to load. String, defaults to 'white'.", default="white")
     parser.add_argument("-e", "--hemi", help="The hemisphere to load. One of ('both', 'lh, 'rh'). Defaults to 'both'.", default="both", choices=['lh', 'rh', 'both'])
     parser.add_argument("-c", "--common-subject-mode", help="Load data mapped to a common or average subject.", action="store_true")
@@ -59,16 +59,23 @@ def brainviewer():
         interactive = True
     mlab.options.offscreen = not interactive
 
+    load_morphometry_data = measure is not None
+
     if args.common_subject_mode:
         fwhm = args.fwhm
         average_subject = args.average_subject
         if verbose:
             print("Loading data mapped to common subject %s for subject %s from subjects dir '%s': measure %s of surface %s for hemisphere %s at fwhm %s." % (average_subject, subject_id, subjects_dir, measure, surface, hemi, fwhm))
-        vert_coords, faces, morphometry_data, meta_data = bl.subject_avg(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi, fwhm=fwhm, average_subject=average_subject)
+        vert_coords, faces, morphometry_data, meta_data = bl.subject_avg(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi, fwhm=fwhm, average_subject=average_subject, load_morphometry_data=load_morphometry_data)
     else:
         if verbose:
             print("Loading data for subject %s from subjects dir '%s': measure %s of surface %s for hemisphere %s." % (subject_id, subjects_dir, measure, surface, hemi))
-        vert_coords, faces, morphometry_data, meta_data = bl.subject(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi)
+        vert_coords, faces, morphometry_data, meta_data = bl.subject(subject_id, subjects_dir=subjects_dir, measure=measure, surf=surface, hemi=hemi, load_morphometry_data=load_morphometry_data)
+
+    if not load_morphometry_data:
+        if verbose:
+            print("No morphometry data loaded, setting all values to zero.")
+        morphometry_data = np.zeros((vert_coords.shape[0],), dtype=float)
 
     morphometry_data = morphometry_data.astype(float)
 
