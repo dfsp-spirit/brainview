@@ -101,3 +101,10 @@ def test_get_export_string_raises_on_invalid_export_format():
         export_str = be._get_export_string('invalid_format', vertex_coords, faces, None, 'viridis', -1)
     assert 'export_format must be one of' in str(exc_info.value)
     assert 'invalid_format' in str(exc_info.value)
+
+def test_clip_data_at_percentiles():
+    data = np.array([50, 51, 48, 49, 50, 48, 50, 50, 48, 48, 50, 53, 52, 48, 50, 51, 48, 49, 50, 48, 50, 50, 48, 48, 50, 53, 52, 48, 50, 51, 48, 49, 50, 48, 50, 50, 48, 48, 50, 53, 52, 48, 1, 100])
+    clipped = be.clip_data_at_percentiles(data)
+    assert data.shape == clipped.shape
+    assert np.min(clipped) > 20.0
+    assert np.max(clipped) < 80.0

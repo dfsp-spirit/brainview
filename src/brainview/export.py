@@ -9,6 +9,7 @@ import brainload as bl
 import os
 import matplotlib
 import brainload.meshexport as me
+import numpy as np
 
 
 def clip_data_at_percentiles(data, lower=5, upper=95):
