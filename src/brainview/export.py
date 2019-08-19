@@ -11,8 +11,39 @@ import matplotlib
 import brainload.meshexport as me
 
 
-def export_mesh_to_file(filename, vertex_coords, faces, morphometry_data=None, colormap_name='viridis', colormap_adjust_alpha_to=-1):
+def clip_data_at_percentiles(data, lower=5, upper=95):
+    """
+    Clip data at given percentiles.
+
+    Clip data at given percentiles to remove extreme values. Computes the percentiles, then sets all values which are more extreme to the percentile values. Useful for plotting data that has some outliers, as these will otherwise have a large impact on the color map and thus the readability of the plot: all the values of interest will look extremely similar if there are outliers.
+
+    Parameters
+    ----------
+    data: numpy 1D array
+        The full data to be clipped.
+
+    lower: int, optional
+        Lower percentile, all values below this percentile will be clipped to the value at this percentile. Defaults to 5.
+
+    upper: int, optional
+        Upper percentile, all values above this percentile will be clipped to the value at this percentile. Defaults to 95.
+
+    Returns
+    -------
+    numpy array
+        The clipped data.
+
+    Examples
+    --------
+    >>> clipped_data = clip_data_at_percentiles(raw_data)
+    """
+    return np.clip(data, np.percentile(data, lower), np.percentile(data, upper))
+
+
+def export_mesh_to_file(filename, vertex_coords, faces, morphometry_data=None, colormap_name='viridis', colormap_adjust_alpha_to=-1, clip_data_perc=None):
     export_format, matched = _mesh_export_format_from_filename(filename)
+    if clip_data_perc is not None:
+        morphometry_data = clip_data_at_percentiles(morphometry_data, clip_data_perc[0], clip_data_perc[1])
     export_string = _get_export_string(export_format, vertex_coords, faces, morphometry_data, colormap_name, colormap_adjust_alpha_to)
 
     with open(filename, "w") as text_file:
