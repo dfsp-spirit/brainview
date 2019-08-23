@@ -82,7 +82,6 @@ def brainviewer():
     morphometry_data = morphometry_data.astype(float)
 
     if verbose:
-        print(meta_data)
         if hemi == "lh" or hemi == "both":
             print("Loaded lh surface mesh from file '%s'." % meta_data["lh.surf_file"])
             if load_morphometry_data:
