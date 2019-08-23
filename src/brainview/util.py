@@ -101,9 +101,15 @@ def get_default_config():
     config.add_section('mesh')
     config.set('mesh', 'representation', 'surface') # see https://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html#triangular-mesh for representations
     config.set('mesh', 'colormap', 'cool') # the colormap to use for live mesh visualization in brainview, see https://docs.enthought.com/mayavi/mayavi/mlab.html#adding-color-or-size-variations for available maps
+    config.set('mesh', 'clip_values', True)
+    config.set('mesh', 'clip_values_lower', 5)
+    config.set('mesh', 'clip_values_lower', 95)
     config.add_section('meshexport')
     config.set('meshexport', 'colormap', 'viridis') # the colormap to use for mesh export when using vertex colors. This can use all matplotlib colormaps, see https://matplotlib.org/examples/color/colormaps_reference.html
     config.set('meshexport', 'colormap_adjust_alpha_to', '-1') # an integer value to set the alpha of the color values to when exporting (0..255). If set to any value < 0, the alpha values will not be changed.
+    config.set('meshexport', 'clip_values', True)
+    config.set('meshexport', 'clip_values_lower', 5)
+    config.set('meshexport', 'clip_values_lower', 95)
     return config
 
 

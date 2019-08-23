@@ -6,6 +6,7 @@ import numpy as np
 import brainload as bl
 import mayavi.mlab as mlab
 import brainview as bv
+import brainview.export as bex
 import argparse
 
 # To run this in dev mode (in virtual env, pip -e install of brainview active) from REPO_ROOT:
@@ -30,6 +31,7 @@ def brainviewer():
     parser.add_argument("-f", "--fwhm", help="The smoothing or fwhm setting to use for the common subject measure. String, defaults to '10'. Ignored unless -c is active.", default="10")
     parser.add_argument("-i", "--interactive", help="Display brain plot in an interactive window.", action="store_true")
     parser.add_argument("-o", "--outputfile", help="Output image file name. String, defaults to 'brain_morphometry.png'.", default="brain_morphometry.png")
+    parser.add_argument("-n", "--no-clip", help="Do not clip morphometry values.", action="store_true")
     parser.add_argument("-v", "--verbose", help="Increase output verbosity.", action="store_true")
     parser.add_argument("-x", "--mesh-export", help="Mesh export output filename. The file extension should be '.obj' or '.ply' to indicate the output format, otherwise obj is used. Optional, if not given at all, then no mesh will be exported.", default="")
     args = parser.parse_args()
@@ -80,25 +82,46 @@ def brainviewer():
     morphometry_data = morphometry_data.astype(float)
 
     if verbose:
+        print(meta_data)
         if hemi == "lh" or hemi == "both":
             print("Loaded lh surface mesh from file '%s'." % meta_data["lh.surf_file"])
-            print("Loaded lh morphometry data from file '%s'." % meta_data["lh.morphometry_file"])
+            if load_morphometry_data:
+                print("Loaded lh morphometry data from file '%s'." % meta_data["lh.morphometry_file"])
         if hemi == "rh" or hemi == "both":
             print("Loaded rh surface from file '%s'." % meta_data["rh.surf_file"])
-            print("Loaded rh morphometry data from file '%s'." % meta_data["rh.morphometry_file"])
-        print("Loaded mesh consisting of %d vertices and %d faces. Loaded morphometry data for %d vertices." % (vert_coords.shape[0], faces.shape[0], morphometry_data.shape[0]))
+            if load_morphometry_data:
+                print("Loaded rh morphometry data from file '%s'." % meta_data["rh.morphometry_file"])
+        print("Loaded mesh consisting of %d vertices and %d faces." % (vert_coords.shape[0], faces.shape[0]))
+        if load_morphometry_data:
+            print("Loaded morphometry data for %d vertices." % (morphometry_data.shape[0]))
 
     fig_title = 'Brainviewer: %s: %s of surface %s' % (subject_id, measure, surface)
 
     if args.mesh_export != "":
         colormap_name = bv.cfg_get('meshexport', 'colormap', 'viridis')
         colormap_adjust_alpha_to = bv.cfg_getint('meshexport', 'colormap_adjust_alpha_to', -1)
+        clip_values_export = bv.cfg_getboolean('meshexport', 'clip_values', True)
+        if clip_values_export and not args.no_clip:
+            clip_values_lower = bv.cfg_getint('meshexport', 'clip_values_lower', 5)
+            clip_values_upper = bv.cfg_getint('meshexport', 'clip_values_upper', 95)
+            print("Clipping exported values below percentile %d and above %d." % (clip_values_lower, clip_values_upper))
+            morphometry_data_for_export = bex.clip_data_at_percentiles(morphometry_data, lower=clip_values_lower, upper=clip_values_upper)
+        else:
+            morphometry_data_for_export = morphometry_data
         print("Exporting brain mesh to file '%s'..." % args.mesh_export)
-        bv.export_mesh_to_file(args.mesh_export, vert_coords, faces, morphometry_data=morphometry_data, colormap_name=colormap_name, colormap_adjust_alpha_to=colormap_adjust_alpha_to)
+        bv.export_mesh_to_file(args.mesh_export, vert_coords, faces, morphometry_data=morphometry_data_for_export, colormap_name=colormap_name, colormap_adjust_alpha_to=colormap_adjust_alpha_to)
 
     fig = mlab.figure(fig_title, bgcolor=(1, 1, 1), size=(bv.cfg_getint('figure', 'width', 800), bv.cfg_getint('figure', 'height', 600)))
     mesh_args = {'representation': bv.cfg_get('mesh', 'representation', 'surface'), 'colormap': bv.cfg_get('mesh', 'colormap', 'cool')}
-    brain_mesh = bv.brain_morphometry_view(fig, vert_coords, faces, morphometry_data, **mesh_args)
+    clip_values_live = bv.cfg_getboolean('mesh', 'clip_values', True)
+    if clip_values_live and not args.no_clip:
+        clip_values_lower = bv.cfg_getint('mesh', 'clip_values_lower', 5)
+        clip_values_upper = bv.cfg_getint('mesh', 'clip_values_upper', 95)
+        print("Clipping visualized values below percentile %d and above %d." % (clip_values_lower, clip_values_upper))
+        morphometry_data_live = bex.clip_data_at_percentiles(morphometry_data, lower=clip_values_lower, upper=clip_values_upper)
+    else:
+        morphometry_data_live = morphometry_data
+    brain_mesh = bv.brain_morphometry_view(fig, vert_coords, faces, morphometry_data_live, **mesh_args)
     print("Saving brain view to image file '%s'..." % (args.outputfile))
     mlab.savefig(args.outputfile)
     if interactive:
