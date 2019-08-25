@@ -6,6 +6,7 @@ import numpy as np
 import brainload as bl
 import mayavi.mlab as mlab
 import brainview as bv
+import brainview.export as bex
 import argparse
 
 # To run this in dev mode (in virtual env, pip -e install of brainview active) from REPO_ROOT:
@@ -30,6 +31,7 @@ def atlasviewer():
     parser.add_argument("-i", "--interactive", help="Display brain plot in an interactive window.", action="store_true")
     parser.add_argument("-o", "--outputfile", help="Output image file name. String, defaults to 'brain_<mode>.png'.", default=None)
     parser.add_argument("-v", "--verbose", help="Increase output verbosity.", action="store_true")
+    parser.add_argument("-x", "--mesh-export", help="Mesh export output filename. The file extension should be '.obj' or '.ply' to indicate the output format, otherwise obj is used. Optional, if not given at all, then no mesh will be exported.", default="")
     args = parser.parse_args()
 
     verbose = False
@@ -75,6 +77,13 @@ def atlasviewer():
             print("Loading label %s for subject %s from subjects dir %s: displaying on surface %s for hemisphere %s." % (data, subject_id, subjects_dir, surface, hemi))
         verts_in_label, label_meta_data = bl.label(subject_id, subjects_dir, data, hemi=hemi, meta_data=morphometry_meta_data)
         brain_mesh = bv.brain_label_view(fig, vert_coords, faces, verts_in_label)
+
+    if args.mesh_export != "":
+        colormap_name = bv.cfg_get('meshexport', 'colormap', 'viridis')
+        colormap_adjust_alpha_to = bv.cfg_getint('meshexport', 'colormap_adjust_alpha_to', -1)
+        print("Exporting brain mesh to file '%s'..." % args.mesh_export)
+        bv.export_mesh_to_file(args.mesh_export, vert_coords, faces, morphometry_data=morphometry_data, colormap_name=colormap_name, colormap_adjust_alpha_to=colormap_adjust_alpha_to)
+
 
 
     print("Saving brain view to file '%s'..." % (outputfile))
