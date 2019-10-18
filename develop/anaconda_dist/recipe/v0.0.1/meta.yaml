@@ -58,9 +58,17 @@ about:
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: Visualize morphometry neuroimaging data on 3D brain meshes.
+  summary: Visualize morphometry neuroimaging data on three-dimensional brain surface meshes.
   doc_url: http://dfsp-spirit.github.io/brainview
   dev_url: https://github.com/dfsp-spirit/brainview
+  description: |
+    Visualize surface-based brain morphometry data like cortical thickness on
+    brain surface meshes. The meshes can be loaded from FreeSurfer file formats,
+    and the data can be anything. The result is an interactive visualization
+    based on matplotlib and mayavi. While the result can be saved to an image file,
+    this module does not try to produce publication-ready plots but focuses on
+    interactive visualization.
+
 
 extra:
   recipe-maintainers:
