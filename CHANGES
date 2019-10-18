@@ -1,1 +1,11 @@
-None yet
+Brainview Changes
+=================
+
+Version 0.0.2
+------------------
+- Add description to conda recipe
+- Move to new conda build process
+
+Version 0.0.1
+--------------
+- First released version.
