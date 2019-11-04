@@ -70,6 +70,21 @@ You can also install into a virtual environment (python2: virtualenv, python3: v
 
 Both source and wheel packages are also available here in the [brainview releases](https://github.com/dfsp-spirit/brainview/releases) section at GitHub, but you should not need them.
 
+**System dependencies**:
+
+Brainview itself does not have system-level dependencies, but it is based on other packages which have them. When using *pip*, you may need to install system dependencies using your OS package system.
+
+This is only needed if you do not have the packages already. In that case, you will get errors like these when loading brainview:
+
+* `ModuleNotFoundError: No module named 'PyQt5.QtSvg'`
+
+To install the dependencies under deb-based Distros (Debian, Ubuntu, ...):
+
+```console
+sudo apt-get install python3-pyqt5 python3-pyqt5.qtsvg
+```
+
+
 #### via Anaconda
 
 I started building conda packages for different operating systems, check https://anaconda.org/dfspspirit/brainview to see whether one is available for yours. In case it is:
