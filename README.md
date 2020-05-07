@@ -1,7 +1,7 @@
 # brainview
 Simple Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and Mayavi. This is a prototype and not ready for production.
 
-## IMPORTANT UPDATE
+## IMPORTANT UPDATE on the project status
 
 After playing with it for a while I have come to the conclusion that I don't really like Mayavi. For now, this project is on halt. 
 
@@ -15,11 +15,10 @@ Note that brainload plots data, not colors, i.e., the colors are usually derived
 
 IMPORTANT: Brainload only provides basic visualization functions intended for quick (and usually interactive) live inspection of your data. If you are interesting in a full-featured brain visualization solution that can provide output in publication quality, I suggest you have a look at [PySurfer](https://pysurfer.github.io/) instead. Brainview is in no way intended to be a replacement for tools like PySurfer.
 
-[![Build Status](https://travis-ci.org/dfsp-spirit/brainview.svg?branch=master)](https://travis-ci.org/dfsp-spirit/brainview)
 
 ## Development stage
 
-We now (January 2019) have a first alpha release. Feel free to try it, but it's very early.
+A first alpha release exists since Jan 2019. Feel free to try it, but it's very early. ALso see the note above regarding project status.
 
 
 ## Interface (WIP)
@@ -115,6 +114,7 @@ If you do not have your MRI data / FreeSurfer output at hand but still want to t
 
 Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT file](README_DEVELOPMENT.md) in this repository for instructions on installing the development version and running the tests.
 
+[![Build Status](https://travis-ci.org/dfsp-spirit/brainview.svg?branch=master)](https://travis-ci.org/dfsp-spirit/brainview)
 
 ## Related neuroimaging tools
 
