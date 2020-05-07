@@ -118,7 +118,7 @@ Tests and test data are not shipped in the releases, see the [README_DEVELOPMENT
 
 ## Related neuroimaging tools
 
-- If you want a full brain visualization package for Python that allows you to plot morphometry data in various ways and in publication quality, you should definitely have a look at [PySurfer](https://pysurfer.github.io/). PySurfer also offers different views of the brain in a single overview image and supports time data.
+- If you want a full brain visualization package for Python that allows you to plot morphometry data in various ways and in publication quality, you should definitely have a look at [PySurfer](https://pysurfer.github.io/). PySurfer also offers different views of the brain in a single overview image and supports time data. Another interesting tool for Python is [pycortex](https://github.com/gallantlab/pycortex).
 - If you have to use Matlab instead of Python, I can recommend [SurfStat](http://www.math.mcgill.ca/keith/surfstat/). It can do way more than visualization: it also features terms which allow you do conveniently formulate GLMs and it has support for different methods to detect spatial clusters of significant group differences, correct for multiple comparisons and more.
 - If you like GNU R, you should have a look at my [fsbrain package](https://github.com/dfsp-spirit/fsbrain). It provides a high-level API for the visualization of brain surface data and is way more advanced than brainview.
 
