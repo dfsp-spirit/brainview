@@ -1,6 +1,11 @@
 # brainview
-Simple Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and Mayavi.
+Simple Python module to visualize morphometry data on 3D brain meshes. Based on matplotlib and Mayavi. This is a prototype and not ready for production.
 
+## IMPORTANT UPDATE
+
+After playing with it for a while I have come to the conclusion that I don't really like Mayavi. For now, this project is on halt. 
+
+I suggest to have a look at [pycortex](https://github.com/gallantlab/pycortex) or [PySurfer](https://pysurfer.github.io/) for brain visulization in Python.
 
 ## About
 
